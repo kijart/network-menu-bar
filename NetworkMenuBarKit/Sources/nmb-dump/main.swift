@@ -11,6 +11,12 @@ for row in classify(state) {
     print(row.kind, row.bsdName, row.name ?? "-", provider, row.ipv4 ?? "—", separator: "\t")
 }
 
+let rows = classify(state)
+print("\n--- Summary ---")
+print("icon:", connectionKind(interfaces: rows, primaryInterface: state.primaryInterface))
+print("active:", activeInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
+print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
+
 // `--raw` prints the dynamic store's network state keys, to identify VPN clients
 // that don't register a service (Tunnelblick, AWS VPN Client).
 if CommandLine.arguments.contains("--raw"),

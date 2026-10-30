@@ -38,3 +38,18 @@ public struct NetworkInterfaceInfo: Identifiable, Sendable, Equatable {
         self.ipv4 = ipv4
     }
 }
+
+public enum PublicIPState: Sendable, Equatable {
+    case loading(previous: String?)
+    case available(String)
+    case unavailable
+
+    /// The address worth showing: the current one, or the last known one while refreshing.
+    public var address: String? {
+        switch self {
+        case .available(let address): address
+        case .loading(let previous): previous
+        case .unavailable: nil
+        }
+    }
+}
