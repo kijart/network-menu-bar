@@ -2,7 +2,14 @@ import Foundation
 import NetworkMenuBarKit
 import SystemConfiguration
 
-dump(SystemStateReader().read())
+let state = SystemStateReader().read()
+dump(state)
+
+print("\n--- Rows ---")
+for row in classify(state) {
+    let provider = row.vpnProvider.map { "\($0)" } ?? "-"
+    print(row.kind, row.bsdName, row.name ?? "-", provider, row.ipv4 ?? "—", separator: "\t")
+}
 
 // `--raw` prints the dynamic store's network state keys, to identify VPN clients
 // that don't register a service (Tunnelblick, AWS VPN Client).
