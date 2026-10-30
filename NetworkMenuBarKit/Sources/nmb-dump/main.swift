@@ -16,6 +16,7 @@ print("\n--- Summary ---")
 print("icon:", connectionKind(interfaces: rows, primaryInterface: state.primaryInterface))
 print("active:", activeInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
 print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
+print("public:", (try? await PublicIPService().fetchPublicIP()) ?? "unavailable")
 
 // `--raw` prints the dynamic store's network state keys, to identify VPN clients
 // that don't register a service (Tunnelblick, AWS VPN Client).
