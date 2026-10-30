@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Xcode (project is generated from project.yml by XcodeGen)
+NetworkMenuBar.xcodeproj/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Build and release output
+build/
+dist/

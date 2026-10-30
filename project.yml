@@ -1,0 +1,39 @@
+name: NetworkMenuBar
+options:
+  bundleIdPrefix: io.github.kijart
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+knownRegions: [en, es]
+packages:
+  NetworkMenuBarKit:
+    path: NetworkMenuBarKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  NetworkMenuBar:
+    type: application
+    platform: macOS
+    sources: [NetworkMenuBar]
+    dependencies:
+      - package: NetworkMenuBarKit
+        product: NetworkMenuBarKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.kijart.NetworkMenuBar
+        INFOPLIST_FILE: NetworkMenuBar/Info.plist
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        GENERATE_INFOPLIST_FILE: NO
+schemes:
+  NetworkMenuBar:
+    build:
+      targets:
+        NetworkMenuBar: all
+    run:
+      config: Debug
