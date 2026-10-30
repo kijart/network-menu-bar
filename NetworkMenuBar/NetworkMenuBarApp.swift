@@ -6,6 +6,7 @@ struct NetworkMenuBarApp: App {
     @State private var monitor: NetworkMonitor
 
     init() {
+        LaunchAtLogin.applyDefaultIfNeeded()
         let monitor = NetworkMonitor()
         monitor.start()
         _monitor = State(initialValue: monitor)
@@ -20,8 +21,7 @@ struct NetworkMenuBarApp: App {
         .menuBarExtraStyle(.window)
 
         Settings {
-            Text(verbatim: "Settings")
-                .padding()
+            SettingsView()
         }
     }
 }

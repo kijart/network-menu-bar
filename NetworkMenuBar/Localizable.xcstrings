@@ -2,12 +2,32 @@
   "sourceLanguage": "en",
   "version": "1.0",
   "strings": {
+    "Compact": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compacta"
+          }
+        }
+      }
+    },
     "Copied": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Copiada"
+          }
+        }
+      }
+    },
+    "Detailed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detallada"
           }
         }
       }
@@ -22,12 +42,102 @@
         }
       }
     },
+    "Icon and text": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icono y texto"
+          }
+        }
+      }
+    },
+    "Icon only": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo icono"
+          }
+        }
+      }
+    },
+    "Language": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
+          }
+        }
+      }
+    },
+    "Language changes take effect after restarting NetworkMenuBar.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los cambios de idioma se aplican al reiniciar NetworkMenuBar."
+          }
+        }
+      }
+    },
+    "Launch at login": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir al iniciar sesión"
+          }
+        }
+      }
+    },
+    "Menu bar": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barra de menú"
+          }
+        }
+      }
+    },
+    "Menu bar text": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Texto en la barra"
+          }
+        }
+      }
+    },
+    "Menu layout": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vista del menú"
+          }
+        }
+      }
+    },
     "Not connected": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Desconectada"
+          }
+        }
+      }
+    },
+    "Private IP": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IP privada"
           }
         }
       }
@@ -72,6 +182,16 @@
         }
       }
     },
+    "System": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema"
+          }
+        }
+      }
+    },
     "Unavailable": {
       "localizations": {
         "es": {
@@ -108,6 +228,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "vía %@"
+          }
+        }
+      }
+    },
+    "…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "…"
           }
         }
       }
