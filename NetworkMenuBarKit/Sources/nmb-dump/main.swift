@@ -31,3 +31,21 @@ if CommandLine.arguments.contains("--raw"),
         }
     }
 }
+
+// `--watch` runs the live NetworkMonitor and prints every change until interrupted.
+if CommandLine.arguments.contains("--watch") {
+    setvbuf(stdout, nil, _IOLBF, 0)
+    let monitor = NetworkMonitor()
+    monitor.start()
+    print("\n--- Watching (Ctrl-C to stop) ---")
+    var last = ""
+    while true {
+        let rows = monitor.interfaces.map { "\($0.bsdName)=\($0.ipv4 ?? "—")" }.joined(separator: " ")
+        let line = "\(monitor.connection) | via \(monitor.viaInterface?.bsdName ?? "—") | public \(monitor.publicIP) | \(rows)"
+        if line != last {
+            print(Date.now.formatted(date: .omitted, time: .standard), line)
+            last = line
+        }
+        try await Task.sleep(for: .milliseconds(200))
+    }
+}
