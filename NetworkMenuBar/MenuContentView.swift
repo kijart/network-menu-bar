@@ -56,7 +56,7 @@ struct MenuContentView: View {
                 openSettings()
             } label: { shortcutLabel("Settings…", shortcut: "⌘,") }
                 .keyboardShortcut(",")
-            Button { NSApp.terminate(nil) } label: { shortcutLabel("Quit", shortcut: "⌘Q") }
+            Button { NSApp.terminate(nil) } label: { shortcutLabel("Quit Network Menu Bar", shortcut: "⌘Q") }
                 .keyboardShortcut("q")
         }
     }

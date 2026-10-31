@@ -162,12 +162,12 @@
         }
       }
     },
-    "Quit": {
+    "Quit Network Menu Bar": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Salir"
+            "value": "Salir de Network Menu Bar"
           }
         }
       }
