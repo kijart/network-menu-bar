@@ -22,12 +22,12 @@
 
 ## Features
 
-- **Connection at a glance** — the menu bar icon changes with your connection: Ethernet, Wi‑Fi, VPN or offline.
-- **Public and private IPs** — your public IP on top, then the private IPv4 of every network. Click any of them to copy it.
+- **Its own menu bar icon** — never mistaken for the system Wi‑Fi icon, and dimmed when you're offline.
+- **Public and private IPs** — your public IP on top, then the private IPv4 of every network, each with an Ethernet, Wi‑Fi or VPN icon. Click any of them to copy it.
 - **VPN aware** — detects WireGuard tunnels by name, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
 - **Knows where your traffic goes** — the detailed layout shows which network your public IP exits through, even with split‑tunnel VPNs.
 - **Updates itself** — reacts instantly when you plug a cable, switch Wi‑Fi or connect a VPN. No polling.
-- **Compact or detailed** — pick the layout, and optionally show the public or private IP next to the icon.
+- **Compact or detailed** — pick the layout, hide the network icons, and optionally show the public or private IP next to the menu bar icon.
 - **Native and lightweight** — SwiftUI, no dependencies, no Dock icon. Launches at login.
 - **English and Spanish.**
 
@@ -74,6 +74,7 @@ Open the menu and choose **Settings…** (⌘,):
 | Setting | Options |
 | --- | --- |
 | Menu layout | Compact · Detailed |
+| Show network icons | On · Off |
 | Menu bar | Icon only · Icon and text |
 | Menu bar text | Public IP · Private IP |
 | Launch at login | On · Off |
@@ -88,6 +89,10 @@ Your public IP is looked up over HTTPS from [api.ipify.org](https://www.ipify.or
 - IPv4 only.
 - OpenVPN tunnels (Tunnelblick, AWS VPN Client) appear only while connected, and only one of them can be identified at a time; others show as a generic VPN.
 - The Wi‑Fi network name is shown only when macOS provides it without Location access.
+
+## AI assistance
+
+This project was developed with the help of AI coding assistants, used to generate and refactor code. All code has been manually reviewed and tested; the design, decisions and responsibility remain with the author.
 
 ## License
 
