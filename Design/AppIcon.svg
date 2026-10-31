@@ -18,13 +18,11 @@
   <rect x="9.77" y="9.77" width="80.47" height="80.47" rx="18.07" fill="url(#shine)"/>
 
   <g clip-path="url(#body)" transform="translate(50 50) scale(0.981) translate(-50 -50)">
-    <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-width="6">
-      <path d="M18 34a45 45 0 0 1 64 0" opacity="0.4"/>
-      <path d="M27.5 43.5a32 32 0 0 1 45 0" opacity="0.7"/>
-      <path d="M37 53a18.5 18.5 0 0 1 26 0"/>
+    <g fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round">
+      <path d="M50 35.1V51M50 51l-18.1 18.1M50 51l18.1 18.1"/>
+      <circle cx="50" cy="27.6" r="7.5"/>
+      <circle cx="26.6" cy="74.4" r="7.5"/>
+      <circle cx="73.4" cy="74.4" r="7.5"/>
     </g>
-    <path d="M41 59h18v13h-4v4H45v-4h-4z" fill="#FFFFFF"/>
-    <path d="M45.5 62v5M50 62v5M54.5 62v5" stroke="#3730A3" stroke-width="1.7"/>
-    <path d="M50 76v16" stroke="#FFFFFF" stroke-width="5"/>
   </g>
 </svg>
