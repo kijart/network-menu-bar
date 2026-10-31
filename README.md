@@ -1,0 +1,94 @@
+<p align="center">
+  <img src="docs/images/icon.png" width="128" height="128" alt="Network Menu Bar icon">
+</p>
+
+<h1 align="center">Network Menu Bar</h1>
+
+<p align="center">
+  Your Ethernet, Wi‑Fi and VPN status — and every IP address that matters — one click away in the macOS menu bar.
+</p>
+
+<p align="center">
+  <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-blue">
+  <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-orange">
+  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green">
+</p>
+
+<p align="center">
+  <img src="docs/images/menu-detailed-light.png" width="300" alt="Detailed layout, light mode">
+  &nbsp;&nbsp;
+  <img src="docs/images/menu-compact-dark.png" width="300" alt="Compact layout, dark mode">
+</p>
+
+## Features
+
+- **Connection at a glance** — the menu bar icon changes with your connection: Ethernet, Wi‑Fi, VPN or offline.
+- **Public and private IPs** — your public IP on top, then the private IPv4 of every network. Click any of them to copy it.
+- **VPN aware** — detects WireGuard tunnels by name, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
+- **Knows where your traffic goes** — the detailed layout shows which network your public IP exits through, even with split‑tunnel VPNs.
+- **Updates itself** — reacts instantly when you plug a cable, switch Wi‑Fi or connect a VPN. No polling.
+- **Compact or detailed** — pick the layout, and optionally show the public or private IP next to the icon.
+- **Native and lightweight** — SwiftUI, no dependencies, no Dock icon. Launches at login.
+- **English and Spanish.**
+
+## Requirements
+
+macOS 14 Sonoma or later.
+
+## Installation
+
+### Download
+
+1. Download the latest `Network-Menu-Bar-x.y.z.zip` from [Releases](https://github.com/kijart/network-menu-bar/releases).
+2. Unzip it and move **Network Menu Bar.app** to your Applications folder.
+3. The first time, **right‑click the app and choose Open**, then confirm.
+
+> [!NOTE]
+> Network Menu Bar is ad‑hoc signed and not notarized by Apple, so Gatekeeper asks for confirmation on first launch. If macOS says the app is damaged or can't be opened, clear the quarantine flag:
+>
+> ```sh
+> xattr -dr com.apple.quarantine "/Applications/Network Menu Bar.app"
+> ```
+
+### Homebrew
+
+Coming soon.
+
+### Build from source
+
+Requires Xcode 16 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
+
+```sh
+brew install xcodegen
+git clone https://github.com/kijart/network-menu-bar.git
+cd network-menu-bar
+make run        # build and launch
+make test       # run the unit tests
+make release    # build, sign ad-hoc and zip into dist/
+```
+
+## Settings
+
+Open the menu and choose **Settings…** (⌘,):
+
+| Setting | Options |
+| --- | --- |
+| Menu layout | Compact · Detailed |
+| Menu bar | Icon only · Icon and text |
+| Menu bar text | Public IP · Private IP |
+| Launch at login | On · Off |
+| Language | System · English · Español |
+
+## Privacy
+
+Your public IP is looked up over HTTPS from [api.ipify.org](https://www.ipify.org), falling back to [checkip.amazonaws.com](https://checkip.amazonaws.com) and [ipv4.icanhazip.com](https://icanhazip.com). The app only asks when it launches, when your network changes, or when you press **Refresh** — never on a timer. Nothing else leaves your Mac: no analytics, no accounts.
+
+## Known limitations
+
+- IPv4 only.
+- OpenVPN tunnels (Tunnelblick, AWS VPN Client) appear only while connected, and only one of them can be identified at a time; others show as a generic VPN.
+- The Wi‑Fi network name is shown only when macOS provides it without Location access.
+
+## License
+
+[MIT](LICENSE)
