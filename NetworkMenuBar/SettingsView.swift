@@ -5,6 +5,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.menuLayout) private var layout: MenuLayout = .compact
     @AppStorage(SettingsKey.menuBarStyle) private var style: MenuBarStyle = .iconOnly
     @AppStorage(SettingsKey.menuBarText) private var textSource: MenuBarTextSource = .publicIP
+    @AppStorage(SettingsKey.showNetworkIcons) private var showNetworkIcons = true
     @AppStorage(SettingsKey.language) private var language: AppLanguage = .system
     @State private var launchAtLogin = LaunchAtLogin.isEnabled
 
@@ -15,6 +16,7 @@ struct SettingsView: View {
                     Text("Compact").tag(MenuLayout.compact)
                     Text("Detailed").tag(MenuLayout.detailed)
                 }
+                Toggle("Show network icons", isOn: $showNetworkIcons)
                 Picker("Menu bar", selection: $style) {
                     Text("Icon only").tag(MenuBarStyle.iconOnly)
                     Text("Icon and text").tag(MenuBarStyle.iconAndText)

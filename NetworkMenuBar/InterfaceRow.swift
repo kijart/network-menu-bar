@@ -4,6 +4,7 @@ import SwiftUI
 struct InterfaceRow: View {
     let interface: NetworkInterfaceInfo
     let layout: MenuLayout
+    @AppStorage(SettingsKey.showNetworkIcons) private var showNetworkIcons = true
     @State private var copied = false
 
     var body: some View {
@@ -12,9 +13,17 @@ struct InterfaceRow: View {
                 Circle()
                     .fill(interface.isActive ? Color.green : Color.secondary.opacity(0.4))
                     .frame(width: 8, height: 8)
+                if showNetworkIcons {
+                    Image(systemName: interface.kind.symbolName)
+                        .foregroundStyle(interface.isActive ? .primary : .secondary)
+                        .frame(width: 16)
+                        .accessibilityLabel(String(localized: "VPN"))
+                        .accessibilityHidden(interface.kind != .vpn)
+                }
                 VStack(alignment: .leading, spacing: 1) {
                     Text(interface.title)
                         .foregroundStyle(interface.isActive ? .primary : .secondary)
+                        .lineLimit(1)
                     if layout == .detailed {
                         Text(interface.detail)
                             .font(.caption)

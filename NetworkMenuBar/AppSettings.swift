@@ -14,6 +14,7 @@ enum SettingsKey {
     static let menuLayout = "menuLayout"
     static let menuBarStyle = "menuBarStyle"
     static let menuBarText = "menuBarText"
+    static let showNetworkIcons = "showNetworkIcons"
     static let language = "language"
 }
 
