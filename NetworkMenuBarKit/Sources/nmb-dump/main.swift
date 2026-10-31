@@ -13,7 +13,7 @@ for row in classify(state) {
 
 let rows = classify(state)
 print("\n--- Summary ---")
-print("icon:", connectionKind(interfaces: rows, primaryInterface: state.primaryInterface))
+print("connection:", connectionKind(interfaces: rows, primaryInterface: state.primaryInterface))
 print("active:", activeInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
 print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
 print("public:", (try? await PublicIPService().fetchPublicIP()) ?? "unavailable")

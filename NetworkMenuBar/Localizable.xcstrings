@@ -132,6 +132,16 @@
         }
       }
     },
+    "Offline": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión"
+          }
+        }
+      }
+    },
     "Private IP": {
       "localizations": {
         "es": {
@@ -178,6 +188,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ajustes…"
+          }
+        }
+      }
+    },
+    "Show network icons": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar iconos de red"
           }
         }
       }

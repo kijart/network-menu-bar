@@ -1,12 +1,22 @@
 import NetworkMenuBarKit
 
 extension ConnectionKind {
+    var title: String {
+        switch self {
+        case .ethernet: String(localized: "Ethernet")
+        case .wifi: String(localized: "Wi-Fi")
+        case .vpn: String(localized: "VPN")
+        case .offline: String(localized: "Offline")
+        }
+    }
+}
+
+extension InterfaceKind {
     var symbolName: String {
         switch self {
         case .ethernet: "cable.connector"
         case .wifi: "wifi"
         case .vpn: "lock.shield"
-        case .offline: "wifi.slash"
         }
     }
 }

@@ -10,7 +10,7 @@ public enum MenuBarTextSource: String, Sendable, CaseIterable {
     case privateIP
 }
 
-/// The connection the menu bar icon represents: any connected VPN first, then the primary interface.
+/// The connection the app treats as current: any connected VPN first, then the primary interface.
 public func activeInterface(interfaces: [NetworkInterfaceInfo], primaryInterface: String?) -> NetworkInterfaceInfo? {
     let active = interfaces.filter(\.isActive)
     let vpns = active.filter { $0.kind == .vpn }
