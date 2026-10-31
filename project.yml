@@ -24,6 +24,8 @@ targets:
         product: NetworkMenuBarKit
     settings:
       base:
+        PRODUCT_NAME: Network Menu Bar
+        PRODUCT_MODULE_NAME: NetworkMenuBar
         PRODUCT_BUNDLE_IDENTIFIER: io.github.kijart.NetworkMenuBar
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_FILE: NetworkMenuBar/Info.plist

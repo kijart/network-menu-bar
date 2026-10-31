@@ -39,7 +39,7 @@ struct SettingsView: View {
                 }
                 .onChange(of: language) { _, language in language.apply() }
             } footer: {
-                Text("Language changes take effect after restarting NetworkMenuBar.")
+                Text("Language changes take effect after restarting Network Menu Bar.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

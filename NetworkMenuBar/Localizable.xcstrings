@@ -72,12 +72,12 @@
         }
       }
     },
-    "Language changes take effect after restarting NetworkMenuBar.": {
+    "Language changes take effect after restarting Network Menu Bar.": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Los cambios de idioma se aplican al reiniciar NetworkMenuBar."
+            "value": "Los cambios de idioma se aplican al reiniciar Network Menu Bar."
           }
         }
       }

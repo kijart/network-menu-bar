@@ -1,7 +1,7 @@
 PROJECT := NetworkMenuBar.xcodeproj
 SCHEME := NetworkMenuBar
 DERIVED := build
-APP := $(DERIVED)/Build/Products/Release/NetworkMenuBar.app
+APP := $(DERIVED)/Build/Products/Release/Network Menu Bar.app
 
 .PHONY: generate build test run clean
 
@@ -15,7 +15,7 @@ test:
 	swift test --package-path NetworkMenuBarKit
 
 run: build
-	open $(APP)
+	open "$(APP)"
 
 clean:
 	rm -rf $(DERIVED) $(PROJECT)
