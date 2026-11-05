@@ -11,8 +11,8 @@ public enum PublicIPError: Error, Equatable {
 
 public struct PublicIPService: PublicIPFetching {
     public static let defaultEndpoints = [
-        URL(string: "https://api.ipify.org")!,
         URL(string: "https://checkip.amazonaws.com")!,
+        URL(string: "https://api.ipify.org")!,
         URL(string: "https://ipv4.icanhazip.com")!,
     ]
 

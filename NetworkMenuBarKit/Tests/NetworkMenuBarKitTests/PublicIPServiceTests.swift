@@ -55,23 +55,23 @@ struct PublicIPServiceTests {
 
     @Test func defaultEndpointsInOrder() {
         #expect(PublicIPService.defaultEndpoints.map(\.absoluteString) == [
-            "https://api.ipify.org",
             "https://checkip.amazonaws.com",
+            "https://api.ipify.org",
             "https://ipv4.icanhazip.com",
         ])
     }
 
-    @Test func returnsTrimmedAddressFromFirstEndpoint() async throws {
-        StubURLProtocol.reset(["api.ipify.org": .body("85.12.34.201\n")])
+    @Test func returnsTrimmedAddressFromAWS() async throws {
+        StubURLProtocol.reset(["checkip.amazonaws.com": .body("85.12.34.201\n")])
 
         #expect(try await service.fetchPublicIP() == "85.12.34.201")
-        #expect(StubURLProtocol.hosts == ["api.ipify.org"])
+        #expect(StubURLProtocol.hosts == ["checkip.amazonaws.com"])
     }
 
     @Test func fallsBackWhenFirstReturnsHTML() async throws {
         StubURLProtocol.reset([
-            "api.ipify.org": .body("<html>Login to Wi-Fi</html>"),
-            "checkip.amazonaws.com": .body("85.12.34.201\n"),
+            "checkip.amazonaws.com": .body("<html>Login to Wi-Fi</html>"),
+            "api.ipify.org": .body("85.12.34.201\n"),
         ])
 
         #expect(try await service.fetchPublicIP() == "85.12.34.201")
@@ -79,19 +79,19 @@ struct PublicIPServiceTests {
 
     @Test func fallsBackOnHTTPError() async throws {
         StubURLProtocol.reset([
-            "api.ipify.org": .body("85.12.34.201", status: 503),
-            "checkip.amazonaws.com": .failure(.timedOut),
+            "checkip.amazonaws.com": .body("85.12.34.201", status: 503),
+            "api.ipify.org": .failure(.timedOut),
             "ipv4.icanhazip.com": .body("85.12.34.201\n"),
         ])
 
         #expect(try await service.fetchPublicIP() == "85.12.34.201")
-        #expect(StubURLProtocol.hosts == ["api.ipify.org", "checkip.amazonaws.com", "ipv4.icanhazip.com"])
+        #expect(StubURLProtocol.hosts == ["checkip.amazonaws.com", "api.ipify.org", "ipv4.icanhazip.com"])
     }
 
     @Test func rejectsIPv6Response() async throws {
         StubURLProtocol.reset([
-            "api.ipify.org": .body("2001:db8::1"),
-            "checkip.amazonaws.com": .body("85.12.34.201"),
+            "checkip.amazonaws.com": .body("2001:db8::1"),
+            "api.ipify.org": .body("85.12.34.201"),
         ])
 
         #expect(try await service.fetchPublicIP() == "85.12.34.201")
@@ -99,8 +99,8 @@ struct PublicIPServiceTests {
 
     @Test func throwsWhenAllFail() async {
         StubURLProtocol.reset([
-            "api.ipify.org": .failure(.notConnectedToInternet),
             "checkip.amazonaws.com": .failure(.notConnectedToInternet),
+            "api.ipify.org": .failure(.notConnectedToInternet),
             "ipv4.icanhazip.com": .failure(.notConnectedToInternet),
         ])
 

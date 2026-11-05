@@ -82,7 +82,7 @@ Open the menu and choose **Settings…** (⌘,):
 
 ## Privacy
 
-Your public IP is looked up over HTTPS from [api.ipify.org](https://www.ipify.org), falling back to [checkip.amazonaws.com](https://checkip.amazonaws.com) and [ipv4.icanhazip.com](https://icanhazip.com). The app only asks when it launches, when your network changes, or when you press **Refresh** — never on a timer. Nothing else leaves your Mac: no analytics, no accounts.
+The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://checkip.amazonaws.com), falling back to [api.ipify.org](https://www.ipify.org) and [ipv4.icanhazip.com](https://icanhazip.com). The lookup only happens at launch, on a network change or on **Refresh** — never on a timer. Nothing else leaves the Mac: no analytics, no accounts.
 
 ## Known limitations
 
