@@ -18,6 +18,7 @@ public final class NetworkMonitor {
     @ObservationIgnored private let publicIPFetcher: any PublicIPFetching
     @ObservationIgnored private let debounce: Duration
     @ObservationIgnored private var pathMonitor: NWPathMonitor?
+    @ObservationIgnored private var pathSatisfied = true
     @ObservationIgnored private(set) var pendingRefresh: Task<Void, Never>?
     @ObservationIgnored private(set) var fetchTask: Task<Void, Never>?
 
@@ -37,8 +38,9 @@ public final class NetworkMonitor {
         guard pathMonitor == nil else { return }
         updateInterfaces()
         let monitor = NWPathMonitor()
-        monitor.pathUpdateHandler = { [weak self] _ in
-            Task { @MainActor in self?.scheduleRefresh() }
+        monitor.pathUpdateHandler = { [weak self] path in
+            let satisfied = path.status == .satisfied
+            Task { @MainActor in self?.pathChanged(satisfied: satisfied) }
         }
         monitor.start(queue: DispatchQueue(label: "NetworkMonitor.path"))
         pathMonitor = monitor
@@ -72,7 +74,14 @@ public final class NetworkMonitor {
         let state = reader.read()
         interfaces = classify(state)
         primaryInterface = state.primaryInterface
-        connection = connectionKind(interfaces: interfaces, primaryInterface: primaryInterface)
+        connection = pathSatisfied ? connectionKind(interfaces: interfaces, primaryInterface: primaryInterface) : .offline
+    }
+
+    /// A tunnel such as WireGuard keeps its address after Wi-Fi or Ethernet drop,
+    /// so only the system's path status can tell that nothing is reachable.
+    func pathChanged(satisfied: Bool) {
+        pathSatisfied = satisfied
+        scheduleRefresh()
     }
 
     /// Coalesces bursts of path updates (e.g. a VPN connecting) into one refresh.

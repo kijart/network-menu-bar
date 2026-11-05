@@ -5,6 +5,7 @@ import Testing
 private enum StubResponse {
     case body(String, status: Int = 200)
     case failure(URLError.Code)
+    case hang
 }
 
 private final class StubURLProtocol: URLProtocol {
@@ -39,6 +40,8 @@ private final class StubURLProtocol: URLProtocol {
             client?.urlProtocolDidFinishLoading(self)
         case .failure(let code):
             client?.urlProtocol(self, didFailWithError: URLError(code))
+        case .hang:
+            break
         case nil:
             client?.urlProtocol(self, didFailWithError: URLError(.cannotFindHost))
         }
@@ -107,6 +110,23 @@ struct PublicIPServiceTests {
         await #expect(throws: PublicIPError.allEndpointsFailed) {
             try await service.fetchPublicIP()
         }
+    }
+
+    @Test func givesUpAtTheOverallDeadline() async {
+        StubURLProtocol.reset(["checkip.amazonaws.com": .hang])
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [StubURLProtocol.self]
+        let service = PublicIPService(session: URLSession(configuration: configuration), deadline: .milliseconds(200))
+        let start = ContinuousClock.now
+
+        await #expect(throws: PublicIPError.timedOut) {
+            try await service.fetchPublicIP()
+        }
+        #expect(ContinuousClock.now - start < .seconds(1))
+    }
+
+    @Test func defaultDeadlineIsFiveSeconds() {
+        #expect(PublicIPService.defaultDeadline == .seconds(5))
     }
 
     @Test func defaultSessionTimeoutIsFiveSeconds() {

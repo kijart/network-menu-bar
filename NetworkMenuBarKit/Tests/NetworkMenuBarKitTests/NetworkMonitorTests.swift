@@ -36,6 +36,13 @@ private let offline = SystemState(
     hardwarePorts: [HardwarePort(bsdName: "en0", kind: .wifi, localizedName: "Wi-Fi")]
 )
 
+private let vpnOnly = SystemState(
+    addresses: ["utun4": ["10.8.0.2"]],
+    hardwarePorts: [HardwarePort(bsdName: "en0", kind: .wifi, localizedName: "Wi-Fi")],
+    vpnServices: [VPNService(name: "Home Lab", providerBundleID: "com.wireguard.macos", bsdName: "utun4")],
+    primaryInterface: "utun4"
+)
+
 @MainActor
 struct NetworkMonitorTests {
     @Test func refreshPublishesInterfacesAndPublicIP() async {
@@ -122,5 +129,32 @@ struct NetworkMonitorTests {
         #expect(monitor.connection == .offline)
         #expect(monitor.publicIP == .unavailable)
         #expect(await fetcher.calls == 0)
+    }
+
+    @Test func unsatisfiedPathIsOfflineEvenWithAVPNTunnel() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: vpnOnly), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.pathChanged(satisfied: false)
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(monitor.connection == .offline)
+        #expect(monitor.publicIP == .unavailable)
+        #expect(await fetcher.calls == 0)
+    }
+
+    @Test func satisfiedPathAgainFetches() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: vpnOnly), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.pathChanged(satisfied: false)
+        await monitor.pendingRefresh?.value
+        monitor.pathChanged(satisfied: true)
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(monitor.connection == .vpn)
+        #expect(monitor.publicIP == .available("85.12.34.201"))
     }
 }
