@@ -66,6 +66,17 @@ private func vpnRows(_ state: SystemState) -> [NetworkInterfaceInfo] {
     #expect(row.ipv4 == "10.8.0.2")
 }
 
+@Test func openVPNConnectTunnelUsesProfileName() throws {
+    let state = SystemState(
+        addresses: ["utun4": ["10.96.0.12"]],
+        vpnServices: [VPNService(name: "Proton CH-10", providerBundleID: "org.openvpn.client.app", bsdName: "utun4")]
+    )
+
+    let row = try #require(vpnRows(state).first)
+    #expect(row.name == "Proton CH-10")
+    #expect(row.vpnProvider == .openVPN)
+}
+
 @Test func disconnectedVPNIsNotListed() {
     let state = SystemState(
         vpnServices: [VPNService(name: "SkynetMAD", providerBundleID: "com.wireguard.macos", bsdName: nil)]

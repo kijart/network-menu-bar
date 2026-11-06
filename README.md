@@ -24,7 +24,7 @@
 
 - **Its own menu bar icon** — never mistaken for the system Wi‑Fi icon, and dimmed when you're offline.
 - **Public and private IPs** — your public IP on top, then the private IPv4 of every network, each with an Ethernet, Wi‑Fi or VPN icon. Click any of them to copy it.
-- **VPN aware** — detects WireGuard tunnels by name, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
+- **VPN aware** — detects WireGuard and OpenVPN Connect tunnels by name, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
 - **Knows where your traffic goes** — the detailed layout shows which network your public IP exits through, even with split‑tunnel VPNs.
 - **Updates itself** — reacts instantly when you plug a cable, switch Wi‑Fi or connect a VPN. No polling.
 - **Compact or detailed** — pick the layout, hide the network icons, and optionally show the public or private IP next to the menu bar icon.
@@ -87,7 +87,7 @@ The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://check
 ## Known limitations
 
 - IPv4 only.
-- OpenVPN tunnels (Tunnelblick, AWS VPN Client) appear only while connected, and only one of them can be identified at a time; others show as a generic VPN.
+- Tunnelblick and AWS VPN Client tunnels appear only while connected, and only one of them can be identified at a time; others show as a generic VPN.
 - The Wi‑Fi network name is shown only when macOS provides it without Location access.
 
 ## AI assistance

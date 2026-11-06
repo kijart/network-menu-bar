@@ -41,7 +41,11 @@ private func vpnRows(_ state: SystemState) -> [NetworkInterfaceInfo] {
         .compactMap { bsdName in
             guard let ipv4 = usableIPv4(bsdName, in: state) else { return nil }
             if let service = state.vpnServices.first(where: { $0.bsdName == bsdName }) {
-                let provider: VPNProvider? = service.providerBundleID == "com.wireguard.macos" ? .wireGuard : nil
+                let provider: VPNProvider? = switch service.providerBundleID {
+                case "com.wireguard.macos": .wireGuard
+                case "org.openvpn.client.app": .openVPN
+                default: nil
+                }
                 return NetworkInterfaceInfo(bsdName: bsdName, kind: .vpn, name: service.name, vpnProvider: provider, ipv4: ipv4)
             }
             if let tunnel = state.openVPNTunnel, tunnel.bsdName == bsdName {
