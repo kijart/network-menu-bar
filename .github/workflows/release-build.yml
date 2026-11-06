@@ -45,14 +45,14 @@ jobs:
       - name: Test
         run: make test
 
-      - name: Build, sign and zip
+      - name: Build, sign and package
         run: make release
 
-      - name: Upload the zip to the release
+      - name: Upload the disk image and its checksum to the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          zip="dist/Network-Menu-Bar-$TAG.zip"
-          test -f "$zip" || { echo "::error::$zip not found; does MARKETING_VERSION match the tag?"; exit 1; }
-          shasum -a 256 "$zip" | tee -a "$GITHUB_STEP_SUMMARY"
-          gh release upload "$TAG" "$zip" --clobber --repo "$GITHUB_REPOSITORY"
+          dmg="dist/Network-Menu-Bar-$TAG.dmg"
+          test -f "$dmg" || { echo "::error::$dmg not found; does MARKETING_VERSION match the tag?"; exit 1; }
+          cat "$dmg.sha256" | tee -a "$GITHUB_STEP_SUMMARY"
+          gh release upload "$TAG" "$dmg" "$dmg.sha256" --clobber --repo "$GITHUB_REPOSITORY"

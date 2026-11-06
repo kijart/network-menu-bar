@@ -6,9 +6,9 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 
 1. Every push to `master` updates an open release pull request with the next version, the `CHANGELOG.md` entry and `MARKETING_VERSION` in `project.yml`. Only `feat`, `fix`, `perf` and `revert` commits are listed in the changelog and start a release; other types (`docs`, `refactor`, `style`, `test`, `build`, `ci`, `chore`) ship with the next release without a changelog entry.
 2. Merging that pull request (with **Rebase and merge** or **Squash and merge**, to keep the history linear) creates the tag `X.Y.Z` (no `v` prefix) and the GitHub Release.
-3. Publishing the release starts the **Release build** workflow on macOS: it runs `make test` and `make release` on the tag, uploads `Network-Menu-Bar-X.Y.Z.zip` to the release and prints its SHA-256 in the job summary.
+3. Publishing the release starts the **Release build** workflow on macOS: it runs `make test` and `make release` on the tag, uploads `Network-Menu-Bar-X.Y.Z.dmg` and its checksum `Network-Menu-Bar-X.Y.Z.dmg.sha256` to the release, and prints the SHA-256 in the job summary.
 
-To rebuild an existing release (for example after a failed upload), run **Release build** from the Actions tab with the tag; the zip is replaced.
+To rebuild an existing release (for example after a failed upload), run **Release build** from the Actions tab with the tag; the disk image and checksum are replaced.
 
 Before 1.0.0, `feat` bumps the minor version and breaking changes do too.
 

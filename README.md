@@ -39,9 +39,11 @@ macOS 14 Sonoma or later.
 
 ### Download
 
-1. Download the latest `Network-Menu-Bar-x.y.z.zip` from [Releases](https://github.com/kijart/network-menu-bar/releases).
-2. Unzip it and move **Network Menu Bar.app** to your Applications folder.
-3. The first time, **right‑click the app and choose Open**, then confirm.
+1. Download the latest `Network-Menu-Bar-x.y.z.dmg` from [Releases](https://github.com/kijart/network-menu-bar/releases). Optionally, download `Network-Menu-Bar-x.y.z.dmg.sha256` next to it and verify the download with `shasum -a 256 -c Network-Menu-Bar-x.y.z.dmg.sha256`.
+2. Open it and drag **Network Menu Bar.app** to the Applications folder.
+3. Allow the first launch:
+   - **macOS 15 or later**: open the app once, then go to **System Settings → Privacy & Security** and click **Open Anyway**, then confirm.
+   - **macOS 14**: right‑click the app, choose **Open** and confirm.
 
 > [!NOTE]
 > Network Menu Bar is ad‑hoc signed and not notarized by Apple, so Gatekeeper asks for confirmation on first launch. If macOS says the app is damaged or can't be opened, clear the quarantine flag:
@@ -64,7 +66,7 @@ git clone https://github.com/kijart/network-menu-bar.git
 cd network-menu-bar
 make run        # build and launch
 make test       # run the unit tests
-make release    # build, sign ad-hoc and zip into dist/
+make release    # build, sign ad-hoc and package a .dmg (plus its SHA-256) into dist/
 ```
 
 Releases are published automatically; see [docs/releasing.md](docs/releasing.md).
