@@ -67,6 +67,8 @@ make test       # run the unit tests
 make release    # build, sign ad-hoc and zip into dist/
 ```
 
+Releases are published automatically; see [docs/releasing.md](docs/releasing.md).
+
 ## Settings
 
 Open the menu and choose **Settings…** (⌘,):

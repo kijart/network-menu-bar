@@ -2,7 +2,7 @@ PROJECT := NetworkMenuBar.xcodeproj
 SCHEME := NetworkMenuBar
 DERIVED := build
 APP := $(DERIVED)/Build/Products/Release/Network Menu Bar.app
-VERSION := $(shell sed -n 's/^ *MARKETING_VERSION: "\(.*\)"/\1/p' project.yml)
+VERSION := $(shell sed -n 's/^ *MARKETING_VERSION: "\([^"]*\)".*/\1/p' project.yml)
 ZIP := dist/Network-Menu-Bar-$(VERSION).zip
 
 .PHONY: generate build test run release clean
