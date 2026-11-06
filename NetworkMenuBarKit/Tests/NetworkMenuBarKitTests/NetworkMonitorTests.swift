@@ -7,6 +7,14 @@ private struct FakeReader: SystemStateReading {
     func read() -> SystemState { state }
 }
 
+private final class SwitchableReader: SystemStateReading, @unchecked Sendable {
+    var state: SystemState
+
+    init(_ state: SystemState) { self.state = state }
+
+    func read() -> SystemState { state }
+}
+
 private struct FetchFailed: Error {}
 
 private actor FakeFetcher: PublicIPFetching {
@@ -156,5 +164,33 @@ struct NetworkMonitorTests {
 
         #expect(monitor.connection == .vpn)
         #expect(monitor.publicIP == .available("85.12.34.201"))
+    }
+
+    @Test func reloadInterfacesUpdatesRowsWithoutFetching() async {
+        let reader = SwitchableReader(onWifi)
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: reader, publicIPFetcher: fetcher)
+        monitor.refresh()
+        await monitor.fetchTask?.value
+
+        reader.state = vpnOnly
+        monitor.reloadInterfaces()
+
+        #expect(monitor.connection == .vpn)
+        #expect(monitor.interfaces.contains { $0.bsdName == "utun4" })
+        #expect(monitor.publicIP == .available("85.12.34.201"))
+        #expect(await fetcher.calls == 1)
+    }
+
+    @Test func storeWatchCoversAddressesPrimaryAndOpenVPN() throws {
+        let matches = { (key: String) in
+            DynamicStoreWatcher.patterns.contains { key.range(of: "^\($0)$", options: .regularExpression) != nil }
+        }
+
+        #expect(matches("State:/Network/Interface/utun4/IPv4"))
+        #expect(matches("State:/Network/Interface/en0/IPv4"))
+        #expect(matches("State:/Network/Global/IPv4"))
+        #expect(matches("State:/Network/OpenVPN"))
+        #expect(!matches("State:/Network/Interface/en0/IPv6"))
     }
 }

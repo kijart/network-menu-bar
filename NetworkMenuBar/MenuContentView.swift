@@ -20,6 +20,7 @@ struct MenuContentView: View {
         .buttonStyle(MenuItemButtonStyle())
         .padding(6)
         .frame(width: 280)
+        .onAppear { monitor.reloadInterfaces() }
     }
 
     private var publicIPHeader: some View {

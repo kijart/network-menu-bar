@@ -18,6 +18,7 @@ public final class NetworkMonitor {
     @ObservationIgnored private let publicIPFetcher: any PublicIPFetching
     @ObservationIgnored private let debounce: Duration
     @ObservationIgnored private var pathMonitor: NWPathMonitor?
+    @ObservationIgnored private var storeWatcher: DynamicStoreWatcher?
     @ObservationIgnored private var pathSatisfied = true
     @ObservationIgnored private(set) var pendingRefresh: Task<Void, Never>?
     @ObservationIgnored private(set) var fetchTask: Task<Void, Never>?
@@ -44,6 +45,17 @@ public final class NetworkMonitor {
         }
         monitor.start(queue: DispatchQueue(label: "NetworkMonitor.path"))
         pathMonitor = monitor
+
+        let watcher = DynamicStoreWatcher { [weak self] in
+            Task { @MainActor in self?.scheduleRefresh() }
+        }
+        watcher.start()
+        storeWatcher = watcher
+    }
+
+    /// Re-reads the interfaces without touching the public IP, e.g. when the menu opens.
+    public func reloadInterfaces() {
+        updateInterfaces()
     }
 
     /// Re-reads the interfaces now and re-fetches the public IP, superseding any fetch in flight.
