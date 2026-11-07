@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/kijart/network-menu-bar/compare/0.1.0...0.1.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* accept only strict public IPv4 addresses from the lookup ([f3af7a9](https://github.com/kijart/network-menu-bar/commit/f3af7a9d9f450f036a4be65134cd590d44cb9943))
+
 ## 0.1.0 (2026-11-06)
 
 
