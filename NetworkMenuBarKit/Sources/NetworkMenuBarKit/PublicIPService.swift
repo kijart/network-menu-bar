@@ -19,24 +19,27 @@ public struct PublicIPService: PublicIPFetching {
     public static let defaultDeadline: Duration = .seconds(5)
 
     private let endpoints: [URL]
-    private let session: URLSession
+    private let configuration: URLSessionConfiguration
     private let deadline: Duration
 
     public init(
         endpoints: [URL] = defaultEndpoints,
-        session: URLSession = .ephemeralWithTimeout,
+        configuration: URLSessionConfiguration = .publicIPLookup,
         deadline: Duration = defaultDeadline
     ) {
         self.endpoints = endpoints
-        self.session = session
+        self.configuration = configuration
         self.deadline = deadline
     }
 
     /// Tries each endpoint in order and returns the first response that is a public IPv4 address,
     /// giving up after `deadline` in total.
     public func fetchPublicIP() async throws -> String {
-        try await withThrowingTaskGroup(of: String.self) { group in
-            group.addTask { try await firstValidAddress() }
+        // A new session per lookup so no connection opened on the previous network is reused.
+        let session = URLSession(configuration: configuration)
+        defer { session.invalidateAndCancel() }
+        return try await withThrowingTaskGroup(of: String.self) { group in
+            group.addTask { try await firstValidAddress(using: session) }
             group.addTask { [deadline] in
                 try await Task.sleep(for: deadline)
                 throw PublicIPError.timedOut
@@ -46,7 +49,7 @@ public struct PublicIPService: PublicIPFetching {
         }
     }
 
-    private func firstValidAddress() async throws -> String {
+    private func firstValidAddress(using session: URLSession) async throws -> String {
         for endpoint in endpoints {
             try Task.checkCancellation()
             guard let (data, response) = try? await session.data(from: endpoint),
@@ -62,10 +65,15 @@ public struct PublicIPService: PublicIPFetching {
     }
 }
 
-extension URLSession {
-    public static let ephemeralWithTimeout: URLSession = {
+extension URLSessionConfiguration {
+    public static var publicIPLookup: URLSessionConfiguration {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.timeoutIntervalForRequest = 5
-        return URLSession(configuration: configuration)
-    }()
+        configuration.httpCookieStorage = nil
+        configuration.httpShouldSetCookies = false
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.urlCache = nil
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        return configuration
+    }
 }

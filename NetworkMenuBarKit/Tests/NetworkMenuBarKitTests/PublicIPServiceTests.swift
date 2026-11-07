@@ -53,7 +53,7 @@ struct PublicIPServiceTests {
     private let service: PublicIPService = {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [StubURLProtocol.self]
-        return PublicIPService(session: URLSession(configuration: configuration))
+        return PublicIPService(configuration: configuration)
     }()
 
     @Test func defaultEndpointsInOrder() {
@@ -126,7 +126,7 @@ struct PublicIPServiceTests {
         StubURLProtocol.reset(["checkip.amazonaws.com": .hang])
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [StubURLProtocol.self]
-        let service = PublicIPService(session: URLSession(configuration: configuration), deadline: .milliseconds(200))
+        let service = PublicIPService(configuration: configuration, deadline: .milliseconds(200))
         let start = ContinuousClock.now
 
         await #expect(throws: PublicIPError.timedOut) {
@@ -139,7 +139,17 @@ struct PublicIPServiceTests {
         #expect(PublicIPService.defaultDeadline == .seconds(5))
     }
 
-    @Test func defaultSessionTimeoutIsFiveSeconds() {
-        #expect(URLSession.ephemeralWithTimeout.configuration.timeoutIntervalForRequest == 5)
+    @Test func lookupConfigurationKeepsNoState() {
+        let configuration = URLSessionConfiguration.publicIPLookup
+        #expect(configuration.timeoutIntervalForRequest == 5)
+        #expect(configuration.httpCookieStorage == nil)
+        #expect(!configuration.httpShouldSetCookies)
+        #expect(configuration.httpCookieAcceptPolicy == .never)
+        #expect(configuration.urlCache == nil)
+        #expect(configuration.requestCachePolicy == .reloadIgnoringLocalCacheData)
+    }
+
+    @Test func lookupConfigurationIsFreshEachTime() {
+        #expect(URLSessionConfiguration.publicIPLookup !== URLSessionConfiguration.publicIPLookup)
     }
 }
