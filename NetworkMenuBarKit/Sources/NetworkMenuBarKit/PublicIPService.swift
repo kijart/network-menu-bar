@@ -1,5 +1,4 @@
 import Foundation
-import Network
 
 public protocol PublicIPFetching: Sendable {
     func fetchPublicIP() async throws -> String
@@ -33,7 +32,7 @@ public struct PublicIPService: PublicIPFetching {
         self.deadline = deadline
     }
 
-    /// Tries each endpoint in order and returns the first response that is a valid IPv4 address,
+    /// Tries each endpoint in order and returns the first response that is a public IPv4 address,
     /// giving up after `deadline` in total.
     public func fetchPublicIP() async throws -> String {
         try await withThrowingTaskGroup(of: String.self) { group in
@@ -54,7 +53,7 @@ public struct PublicIPService: PublicIPFetching {
                   (response as? HTTPURLResponse)?.statusCode == 200 else { continue }
 
             let body = String(decoding: data, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
-            if IPv4Address(body) != nil {
+            if isPublicIPv4(body) {
                 return body
             }
         }

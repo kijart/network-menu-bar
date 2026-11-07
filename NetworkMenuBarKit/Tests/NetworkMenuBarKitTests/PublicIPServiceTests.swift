@@ -100,6 +100,16 @@ struct PublicIPServiceTests {
         #expect(try await service.fetchPublicIP() == "85.12.34.201")
     }
 
+    @Test func fallsBackWhenFirstReturnsANonPublicAddress() async throws {
+        StubURLProtocol.reset([
+            "checkip.amazonaws.com": .body("127.1"),
+            "api.ipify.org": .body("10.0.0.1"),
+            "ipv4.icanhazip.com": .body("85.12.34.201\n"),
+        ])
+
+        #expect(try await service.fetchPublicIP() == "85.12.34.201")
+    }
+
     @Test func throwsWhenAllFail() async {
         StubURLProtocol.reset([
             "checkip.amazonaws.com": .failure(.notConnectedToInternet),
