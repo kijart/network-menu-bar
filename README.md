@@ -24,11 +24,11 @@
 
 - **Its own menu bar icon** — never mistaken for the system Wi‑Fi icon, and dimmed when you're offline.
 - **Public and private IPs** — your public IP on top, then the private IPv4 of every network, each with an Ethernet, Wi‑Fi or VPN icon. Click any of them to copy it.
-- **VPN aware** — detects WireGuard and OpenVPN Connect tunnels by name, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
+- **VPN aware** — names VPNs that macOS knows as network extensions (WireGuard, OpenVPN Connect, Tailscale and others) after their profile, plus OpenVPN connections from Tunnelblick and AWS VPN Client.
 - **Knows where your traffic goes** — the detailed layout shows which network your public IP exits through, even with split‑tunnel VPNs.
-- **Updates itself** — reacts instantly when you plug a cable, switch Wi‑Fi or connect a VPN. No polling.
+- **Updates itself** — refreshes about half a second after a cable is plugged in, the Wi‑Fi changes or a VPN connects. No polling.
 - **Compact or detailed** — pick the layout, hide the network icons, and optionally show the public or private IP next to the menu bar icon.
-- **Native and lightweight** — SwiftUI, no dependencies, no Dock icon. Launches at login.
+- **Native and lightweight** — SwiftUI, no dependencies, no Dock icon. Launches at login once installed in the Applications folder.
 - **English and Spanish.**
 
 ## Requirements
@@ -81,7 +81,7 @@ Open the menu and choose **Settings…** (⌘,):
 | Show network icons | On · Off |
 | Menu bar | Icon only · Icon and text |
 | Menu bar text | Public IP · Private IP |
-| Launch at login | On · Off |
+| Launch at login | On · Off (turned on automatically the first time the app runs from the Applications folder) |
 | Language | System · English · Español |
 
 ## Privacy
