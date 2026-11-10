@@ -91,7 +91,7 @@ The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://check
 ## Known limitations
 
 - IPv4 only.
-- Tunnelblick and AWS VPN Client tunnels appear only while connected, and only one of them can be identified at a time; others show as a generic VPN.
+- Tunnelblick and AWS VPN Client tunnels appear only while connected, and only one of them can be identified at a time; others show as **VPN (utunN)**.
 - The Wi‑Fi network name is shown only when macOS provides it without Location access.
 
 ## AI assistance

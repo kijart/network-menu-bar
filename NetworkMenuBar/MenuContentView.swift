@@ -12,7 +12,7 @@ struct MenuContentView: View {
             publicIPHeader
             Divider().padding(.vertical, 4)
             ForEach(monitor.interfaces) { interface in
-                InterfaceRow(interface: interface, layout: layout)
+                InterfaceRow(interface: interface, title: interface.title(among: monitor.interfaces), layout: layout)
             }
             Divider().padding(.vertical, 4)
             footer
@@ -39,7 +39,7 @@ struct MenuContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 if layout == .detailed, let via = monitor.viaInterface {
-                    Text("via \(via.title)")
+                    Text("via \(via.title(among: monitor.interfaces))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

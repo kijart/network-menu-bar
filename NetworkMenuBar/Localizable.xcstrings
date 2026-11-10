@@ -232,6 +232,16 @@
         }
       }
     },
+    "VPN (%@)": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VPN (%@)"
+          }
+        }
+      }
+    },
     "Wi-Fi": {
       "localizations": {
         "es": {

@@ -3,6 +3,7 @@ import SwiftUI
 
 struct InterfaceRow: View {
     let interface: NetworkInterfaceInfo
+    let title: String
     let layout: MenuLayout
     @AppStorage(SettingsKey.showNetworkIcons) private var showNetworkIcons = true
     @State private var copied = false
@@ -21,7 +22,7 @@ struct InterfaceRow: View {
                         .accessibilityHidden(interface.kind != .vpn)
                 }
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(interface.title)
+                    Text(title)
                         .foregroundStyle(interface.isActive ? .primary : .secondary)
                         .lineLimit(1)
                     if layout == .detailed {

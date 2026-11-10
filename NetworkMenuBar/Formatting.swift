@@ -36,8 +36,14 @@ extension NetworkInterfaceInfo {
         switch kind {
         case .ethernet: String(localized: "Ethernet")
         case .wifi: String(localized: "Wi-Fi")
-        case .vpn: name ?? vpnProvider?.displayName ?? String(localized: "VPN")
+        case .vpn: name ?? vpnProvider?.displayName ?? String(localized: "VPN (\(bsdName))")
         }
+    }
+
+    /// Appends the BSD name when another row has the same title, e.g. two active Ethernet ports.
+    func title(among interfaces: [NetworkInterfaceInfo]) -> String {
+        let isAmbiguous = interfaces.contains { $0.id != id && $0.title == title }
+        return isAmbiguous ? "\(title) (\(bsdName))" : title
     }
 
     /// Secondary line for the detailed layout, e.g. "en0 · Home" or "utun4 · WireGuard".
