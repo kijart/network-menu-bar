@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0](https://github.com/kijart/network-menu-bar/compare/0.1.1...0.2.0) (2026-11-11)
+
+
+### Features
+
+* add an About tab to Settings with the version and repository link ([87670b4](https://github.com/kijart/network-menu-bar/commit/87670b44e9ce0bc69d13716166f8e839b5722139))
+* explain when launch at login waits for approval in System Settings ([92b0ead](https://github.com/kijart/network-menu-bar/commit/92b0ead6c40e2d8f6dc435d4f1b9f8b29d10063a))
+* widen the menu up to 400 pt and wrap long network names ([6860a9f](https://github.com/kijart/network-menu-bar/commit/6860a9fe6f83007ac8e671c21be24a83ae5a64bf))
+
+
+### Bug Fixes
+
+* always open Settings on the General tab ([53cc275](https://github.com/kijart/network-menu-bar/commit/53cc275c650ac22e26a0832defad34374234fb4a))
+* show the full-tunnel VPN as "via" when the primary interface stays physical ([f835d13](https://github.com/kijart/network-menu-bar/commit/f835d13100520fce646317ab22eced5e5735e88b))
+
 ## [0.1.1](https://github.com/kijart/network-menu-bar/compare/0.1.0...0.1.1) (2026-11-11)
 
 
