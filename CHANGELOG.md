@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.1](https://github.com/kijart/network-menu-bar/compare/0.1.0...0.1.1) (2026-11-11)
+
+
+### Bug Fixes
+
+* accept only strict public IPv4 addresses from the lookup ([f3af7a9](https://github.com/kijart/network-menu-bar/commit/f3af7a9d9f450f036a4be65134cd590d44cb9943))
+* name unknown tunnels "VPN (utunN)" and disambiguate duplicate rows ([6b51851](https://github.com/kijart/network-menu-bar/commit/6b5185182f202e17d2d29f6f3e91dc29ecf6b6b2))
+* use a stateless session per public IP lookup ([8b00069](https://github.com/kijart/network-menu-bar/commit/8b000690a552e3fbf6cc10d63b7a16c13b7cdd2d))
+
 ## 0.1.0 (2026-11-06)
 
 
