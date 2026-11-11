@@ -8,11 +8,13 @@ public struct SystemStateReader: SystemStateReading {
 
     public func read() -> SystemState {
         let store = SCDynamicStoreCreate(nil, "NetworkMenuBar" as CFString, nil, nil)
+        let addresses = Self.ipv4Addresses()
         return SystemState(
-            addresses: Self.ipv4Addresses(),
+            addresses: addresses,
             hardwarePorts: Self.hardwarePorts(),
             vpnServices: store.map(Self.vpnServices) ?? [],
             primaryInterface: store.flatMap(Self.primaryInterface),
+            routeInterface: Self.routeInterface(addresses: addresses),
             openVPNTunnel: store.flatMap(Self.openVPNTunnel),
             wifiSSID: CWWiFiClient.shared().interface()?.ssid()
         )
@@ -28,16 +30,41 @@ public struct SystemStateReader: SystemStateReading {
             let entry = pointer.pointee
             guard let address = entry.ifa_addr, address.pointee.sa_family == UInt8(AF_INET) else { continue }
 
-            var host = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
-            let ok = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { sin in
-                var addr = sin.pointee.sin_addr
-                return inet_ntop(AF_INET, &addr, &host, socklen_t(INET_ADDRSTRLEN)) != nil
-            }
-            guard ok else { continue }
-            let ip = String(decoding: host.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
+            let sin = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { $0.pointee }
+            guard let ip = string(from: sin.sin_addr) else { continue }
             result[String(cString: entry.ifa_name), default: []].append(ip)
         }
         return result
+    }
+
+    static func string(from address: in_addr) -> String? {
+        var address = address
+        var host = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
+        guard inet_ntop(AF_INET, &address, &host, socklen_t(INET_ADDRSTRLEN)) != nil else { return nil }
+        return String(decoding: host.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }, as: UTF8.self)
+    }
+
+    /// Connecting a UDP socket sends nothing but makes the kernel pick the source address
+    /// from the routing table, which identifies the interface.
+    static func routeInterface(addresses: [String: [String]]) -> String? {
+        let fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)
+        guard fd >= 0 else { return nil }
+        defer { close(fd) }
+
+        var remote = sockaddr_in()
+        remote.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        remote.sin_family = sa_family_t(AF_INET)
+        remote.sin_port = in_port_t(443).bigEndian
+        remote.sin_addr.s_addr = inet_addr("1.1.1.1")
+        var local = sockaddr_in()
+        var length = socklen_t(MemoryLayout<sockaddr_in>.size)
+        let connected = withUnsafePointer(to: &remote) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { connect(fd, $0, length) == 0 }
+        }
+        guard connected, withUnsafeMutablePointer(to: &local, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { getsockname(fd, $0, &length) == 0 }
+        }), let source = string(from: local.sin_addr) else { return nil }
+        return addresses.first { $0.value.contains(source) }?.key
     }
 
     static func hardwarePorts() -> [HardwarePort] {

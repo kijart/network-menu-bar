@@ -24,7 +24,7 @@ private let aws = NetworkInterfaceInfo(bsdName: "utun4", kind: .vpn, vpnProvider
 
     #expect(connectionKind(interfaces: interfaces, primaryInterface: nil) == .offline)
     #expect(activeInterface(interfaces: interfaces, primaryInterface: nil) == nil)
-    #expect(viaInterface(interfaces: interfaces, primaryInterface: nil) == nil)
+    #expect(viaInterface(interfaces: interfaces, primaryInterface: nil, routeInterface: nil) == nil)
 }
 
 @Test func activeInterfacePrefersPrimaryVPN() {
@@ -35,11 +35,20 @@ private let aws = NetworkInterfaceInfo(bsdName: "utun4", kind: .vpn, vpnProvider
 }
 
 @Test func viaFollowsPrimaryWithSplitTunnel() {
-    #expect(viaInterface(interfaces: [ethernet, aws], primaryInterface: "en9") == ethernet)
+    #expect(viaInterface(interfaces: [ethernet, aws], primaryInterface: "en9", routeInterface: "en9") == ethernet)
 }
 
 @Test func viaIsVPNWhenItHoldsDefaultRoute() {
-    #expect(viaInterface(interfaces: [ethernet, wireGuard], primaryInterface: "utun5") == wireGuard)
+    #expect(viaInterface(interfaces: [ethernet, wireGuard], primaryInterface: "utun5", routeInterface: "utun5") == wireGuard)
+}
+
+@Test func viaFollowsRouteWithFullTunnelKeepingPrimary() {
+    #expect(viaInterface(interfaces: [ethernet, wireGuard], primaryInterface: "en9", routeInterface: "utun5") == wireGuard)
+}
+
+@Test func viaFallsBackToPrimaryWithoutRoute() {
+    #expect(viaInterface(interfaces: [ethernet, wifi], primaryInterface: "en0", routeInterface: nil) == wifi)
+    #expect(viaInterface(interfaces: [ethernet, wifi], primaryInterface: "en0", routeInterface: "utun9") == wifi)
 }
 
 @Test func privateTextUsesActiveInterface() {

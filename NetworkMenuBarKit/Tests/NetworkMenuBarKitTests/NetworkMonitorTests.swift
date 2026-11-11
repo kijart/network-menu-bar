@@ -66,6 +66,18 @@ struct NetworkMonitorTests {
         #expect(monitor.publicIP == .available("85.12.34.201"))
     }
 
+    @Test func viaFollowsFullTunnelRoute() {
+        var fullTunnel = vpnOnly
+        fullTunnel.addresses["en0"] = ["192.168.1.34"]
+        fullTunnel.primaryInterface = "en0"
+        fullTunnel.routeInterface = "utun4"
+        let monitor = NetworkMonitor(reader: FakeReader(state: fullTunnel), publicIPFetcher: FakeFetcher([]))
+
+        monitor.reloadInterfaces()
+
+        #expect(monitor.viaInterface?.bsdName == "utun4")
+    }
+
     @Test func fetchFailureBecomesUnavailable() async {
         let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: FakeFetcher([(.failure(FetchFailed()), .zero)]))
 

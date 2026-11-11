@@ -20,10 +20,17 @@ public func activeInterface(interfaces: [NetworkInterfaceInfo], primaryInterface
         ?? active.first
 }
 
-/// The interface holding the default route, i.e. where public traffic exits.
-public func viaInterface(interfaces: [NetworkInterfaceInfo], primaryInterface: String?) -> NetworkInterfaceInfo? {
+/// Where public traffic exits. Full-tunnel VPNs such as WireGuard add `0/1` and `128/1` routes
+/// instead of replacing the default route, so the primary interface stays on the physical port.
+public func viaInterface(
+    interfaces: [NetworkInterfaceInfo],
+    primaryInterface: String?,
+    routeInterface: String?
+) -> NetworkInterfaceInfo? {
     let active = interfaces.filter(\.isActive)
-    return active.first { $0.bsdName == primaryInterface } ?? active.first
+    return active.first { $0.bsdName == routeInterface }
+        ?? active.first { $0.bsdName == primaryInterface }
+        ?? active.first
 }
 
 public func connectionKind(interfaces: [NetworkInterfaceInfo], primaryInterface: String?) -> ConnectionKind {

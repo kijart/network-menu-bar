@@ -15,7 +15,7 @@ let rows = classify(state)
 print("\n--- Summary ---")
 print("connection:", connectionKind(interfaces: rows, primaryInterface: state.primaryInterface))
 print("active:", activeInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
-print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface)?.bsdName ?? "—")
+print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface, routeInterface: state.routeInterface)?.bsdName ?? "—")
 print("public:", (try? await PublicIPService().fetchPublicIP()) ?? "unavailable")
 
 // `--raw` prints the dynamic store's network state keys, to identify VPN clients

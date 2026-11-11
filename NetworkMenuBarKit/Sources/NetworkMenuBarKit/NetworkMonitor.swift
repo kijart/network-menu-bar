@@ -7,11 +7,12 @@ import Observation
 public final class NetworkMonitor {
     public private(set) var interfaces: [NetworkInterfaceInfo] = []
     public private(set) var primaryInterface: String?
+    public private(set) var routeInterface: String?
     public private(set) var connection: ConnectionKind = .offline
     public private(set) var publicIP: PublicIPState = .loading(previous: nil)
 
     public var viaInterface: NetworkInterfaceInfo? {
-        NetworkMenuBarKit.viaInterface(interfaces: interfaces, primaryInterface: primaryInterface)
+        NetworkMenuBarKit.viaInterface(interfaces: interfaces, primaryInterface: primaryInterface, routeInterface: routeInterface)
     }
 
     @ObservationIgnored private let reader: any SystemStateReading
@@ -86,6 +87,7 @@ public final class NetworkMonitor {
         let state = reader.read()
         interfaces = classify(state)
         primaryInterface = state.primaryInterface
+        routeInterface = state.routeInterface
         connection = pathSatisfied ? connectionKind(interfaces: interfaces, primaryInterface: primaryInterface) : .offline
     }
 
