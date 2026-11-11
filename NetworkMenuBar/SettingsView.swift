@@ -9,14 +9,24 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.showNetworkIcons) private var showNetworkIcons = true
     @AppStorage(SettingsKey.language) private var language: AppLanguage = .system
     @State private var loginStatus = LaunchAtLogin.status
+    @State private var tab = Tab.general
+
+    private enum Tab {
+        case general
+        case about
+    }
 
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             general
                 .tabItem { Label("General", systemImage: "gearshape") }
+                .tag(Tab.general)
             AboutView()
                 .tabItem { Label("About", systemImage: "info.circle") }
+                .tag(Tab.about)
         }
+        // The window keeps its view between openings; About shouldn't greet the next visit.
+        .onDisappear { tab = .general }
     }
 
     private var launchAtLogin: Binding<Bool> {
