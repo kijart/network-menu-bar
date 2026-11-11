@@ -24,13 +24,14 @@ struct InterfaceRow: View {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(title)
                         .foregroundStyle(interface.isActive ? .primary : .secondary)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     if layout == .detailed {
                         Text(interface.detail)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 Spacer(minLength: 12)
@@ -45,7 +46,12 @@ struct InterfaceRow: View {
                 }
             }
         }
+        .help(tooltip)
         .disabled(!interface.isActive)
+    }
+
+    private var tooltip: String {
+        layout == .detailed ? "\(title)\n\(interface.detail)" : title
     }
 
     private func copy() {

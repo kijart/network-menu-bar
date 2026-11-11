@@ -8,6 +8,13 @@ struct MenuContentView: View {
     @State private var publicIPCopied = false
 
     var body: some View {
+        ClampedWidth(range: 280...400) {
+            content
+        }
+        .onAppear { monitor.reloadInterfaces() }
+    }
+
+    private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
             publicIPHeader
             Divider().padding(.vertical, 4)
@@ -19,8 +26,6 @@ struct MenuContentView: View {
         }
         .buttonStyle(MenuItemButtonStyle())
         .padding(6)
-        .frame(width: 280)
-        .onAppear { monitor.reloadInterfaces() }
     }
 
     private var publicIPHeader: some View {
