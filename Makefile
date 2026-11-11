@@ -22,7 +22,7 @@ run: build
 	open "$(APP)"
 
 release: build
-	codesign --force --deep --options runtime --sign - "$(APP)"
+	codesign --force --options runtime --sign - "$(APP)"
 	codesign --verify --strict --verbose=2 "$(APP)"
 	rm -rf "$(STAGE)" && mkdir -p "$(STAGE)" dist
 	ditto "$(APP)" "$(STAGE)/$(APP_NAME)"
