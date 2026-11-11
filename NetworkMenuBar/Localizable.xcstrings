@@ -172,6 +172,16 @@
         }
       }
     },
+    "Open…": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir…"
+          }
+        }
+      }
+    },
     "Private IP": {
       "localizations": {
         "es": {
@@ -278,6 +288,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Versión %@"
+          }
+        }
+      }
+    },
+    "Waiting for approval in System Settings.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendiente de aprobación en Ajustes del Sistema."
           }
         }
       }

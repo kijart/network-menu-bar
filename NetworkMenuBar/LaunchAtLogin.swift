@@ -4,8 +4,8 @@ import ServiceManagement
 enum LaunchAtLogin {
     private static let didApplyDefaultKey = "didApplyLaunchAtLoginDefault"
 
-    static var isEnabled: Bool {
-        SMAppService.mainApp.status == .enabled
+    static var status: SMAppService.Status {
+        SMAppService.mainApp.status
     }
 
     static func setEnabled(_ enabled: Bool) throws {

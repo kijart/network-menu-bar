@@ -1,4 +1,5 @@
 import NetworkMenuBarKit
+import ServiceManagement
 import SwiftUI
 
 struct SettingsView: View {
@@ -7,7 +8,7 @@ struct SettingsView: View {
     @AppStorage(SettingsKey.menuBarText) private var textSource: MenuBarTextSource = .publicIP
     @AppStorage(SettingsKey.showNetworkIcons) private var showNetworkIcons = true
     @AppStorage(SettingsKey.language) private var language: AppLanguage = .system
-    @State private var launchAtLogin = LaunchAtLogin.isEnabled
+    @State private var loginStatus = LaunchAtLogin.status
 
     var body: some View {
         TabView {
@@ -15,6 +16,16 @@ struct SettingsView: View {
                 .tabItem { Label("General", systemImage: "gearshape") }
             AboutView()
                 .tabItem { Label("About", systemImage: "info.circle") }
+        }
+    }
+
+    private var launchAtLogin: Binding<Bool> {
+        // Shown on while macOS waits for approval, so the note below explains why it isn't active yet.
+        Binding {
+            loginStatus == .enabled || loginStatus == .requiresApproval
+        } set: { enabled in
+            try? LaunchAtLogin.setEnabled(enabled)
+            loginStatus = LaunchAtLogin.status
         }
     }
 
@@ -37,12 +48,16 @@ struct SettingsView: View {
                 .disabled(style == .iconOnly)
             }
             Section {
-                Toggle("Launch at login", isOn: $launchAtLogin)
-                    .onChange(of: launchAtLogin) { _, enabled in
-                        guard enabled != LaunchAtLogin.isEnabled else { return }
-                        try? LaunchAtLogin.setEnabled(enabled)
-                        launchAtLogin = LaunchAtLogin.isEnabled
+                Toggle("Launch at login", isOn: launchAtLogin)
+                if loginStatus == .requiresApproval {
+                    HStack {
+                        Text("Waiting for approval in System Settings.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button("Open…") { SMAppService.openSystemSettingsLoginItems() }
                     }
+                }
                 Picker("Language", selection: $language) {
                     Text("System").tag(AppLanguage.system)
                     Text(verbatim: "English").tag(AppLanguage.english)
@@ -56,6 +71,10 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
+        .onAppear { loginStatus = LaunchAtLogin.status }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            loginStatus = LaunchAtLogin.status
+        }
         .frame(width: 380)
         .fixedSize(horizontal: false, vertical: true)
     }
