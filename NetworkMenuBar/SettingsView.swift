@@ -10,6 +10,15 @@ struct SettingsView: View {
     @State private var launchAtLogin = LaunchAtLogin.isEnabled
 
     var body: some View {
+        TabView {
+            general
+                .tabItem { Label("General", systemImage: "gearshape") }
+            AboutView()
+                .tabItem { Label("About", systemImage: "info.circle") }
+        }
+    }
+
+    private var general: some View {
         Form {
             Section {
                 Picker("Menu layout", selection: $layout) {

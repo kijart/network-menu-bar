@@ -88,6 +88,8 @@ Open the menu and choose **Settings…** (⌘,):
 | Launch at login | On · Off (turned on automatically the first time the app runs from the Applications folder) |
 | Language | System · English · Español |
 
+The **About** tab shows the installed version and a link to this repository.
+
 ## Privacy
 
 The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://checkip.amazonaws.com), falling back to [api.ipify.org](https://www.ipify.org) and [ipv4.icanhazip.com](https://icanhazip.com). The lookup only happens at launch, on a network change or on **Refresh** — never on a timer. Nothing else leaves the Mac: no analytics, no accounts.

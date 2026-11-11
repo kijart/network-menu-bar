@@ -2,6 +2,16 @@
   "sourceLanguage": "en",
   "version": "1.0",
   "strings": {
+    "About": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acerca de"
+          }
+        }
+      }
+    },
     "Compact": {
       "localizations": {
         "es": {
@@ -38,6 +48,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ethernet"
+          }
+        }
+      }
+    },
+    "General": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
           }
         }
       }
@@ -88,6 +108,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abrir al iniciar sesión"
+          }
+        }
+      }
+    },
+    "MIT License": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licencia MIT"
           }
         }
       }
@@ -238,6 +268,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "VPN (%@)"
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versión %@"
           }
         }
       }
