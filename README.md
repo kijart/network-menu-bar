@@ -54,7 +54,11 @@ macOS 14 Sonoma or later.
 
 ### Homebrew
 
-Coming soon.
+```sh
+brew install --cask kijart/tap/network-menu-bar
+```
+
+The cask lives in [kijart/homebrew-tap](https://github.com/kijart/homebrew-tap) and clears the quarantine flag, so no Gatekeeper confirmation is needed. Update with `brew upgrade --cask network-menu-bar`.
 
 ### Build from source
 

@@ -23,6 +23,8 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: write
+    outputs:
+      sha256: ${{ steps.upload.outputs.sha256 }}
     env:
       TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
@@ -49,6 +51,7 @@ jobs:
         run: make release
 
       - name: Upload the disk image and its checksum to the release
+        id: upload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -56,3 +59,50 @@ jobs:
           test -f "$dmg" || { echo "::error::$dmg not found; does MARKETING_VERSION match the tag?"; exit 1; }
           cat "$dmg.sha256" | tee -a "$GITHUB_STEP_SUMMARY"
           gh release upload "$TAG" "$dmg" "$dmg.sha256" --clobber --repo "$GITHUB_REPOSITORY"
+          echo "sha256=$(cut -d ' ' -f 1 "$dmg.sha256")" >> "$GITHUB_OUTPUT"
+
+  tap:
+    name: Update the Homebrew tap
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      SHA256: ${{ needs.build.outputs.sha256 }}
+      CASK: repos/${{ github.repository_owner }}/homebrew-tap/contents/Casks/network-menu-bar.rb
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: homebrew-tap
+          permission-contents: write
+
+      - name: Bump the cask
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh api "$CASK" > cask.json
+          jq -r .content cask.json | base64 -d > old.rb
+          current=$(sed -n 's/^  version "\(.*\)"$/\1/p' old.rb)
+          if [ "$(printf '%s\n' "$current" "$TAG" | sort -V | tail -n 1)" != "$TAG" ]; then
+            echo "::notice::The tap already has $current, newer than $TAG; nothing to do"
+            exit 0
+          fi
+          sed -e "s/^  version \".*\"$/  version \"$TAG\"/" -e "s/^  sha256 \".*\"$/  sha256 \"$SHA256\"/" old.rb > new.rb
+          if ! grep -qx "  version \"$TAG\"" new.rb || ! grep -qx "  sha256 \"$SHA256\"" new.rb; then
+            echo "::error::Could not update version and sha256 in the cask"
+            exit 1
+          fi
+          if cmp -s old.rb new.rb; then
+            echo "::notice::The cask is already at $TAG"
+            exit 0
+          fi
+          gh api --method PUT "$CASK" \
+            -f message="network-menu-bar $TAG" \
+            -f content="$(base64 -w 0 new.rb)" \
+            -f sha="$(jq -r .sha cask.json)" > /dev/null
+          echo "Bumped network-menu-bar to $TAG" >> "$GITHUB_STEP_SUMMARY"
