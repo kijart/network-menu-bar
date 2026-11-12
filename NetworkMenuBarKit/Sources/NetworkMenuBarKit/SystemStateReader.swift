@@ -126,9 +126,17 @@ public struct SystemStateReader: SystemStateReading {
     }
 
     static func openVPNTunnel(store: SCDynamicStore) -> OpenVPNTunnel? {
-        guard let info = SCDynamicStoreCopyValue(store, "State:/Network/OpenVPN" as CFString) as? [String: Any],
-              let bsdName = info["TunnelDevice"] as? String else { return nil }
-        let owner = (info["PID"] as? Int32).flatMap(processName) ?? ""
+        let info = SCDynamicStoreCopyValue(store, "State:/Network/OpenVPN" as CFString) as? [String: Any]
+        return info.flatMap { openVPNTunnel(info: $0, processName: processName) }
+    }
+
+    /// The key can outlive its client (e.g. after a crash), so a tunnel whose process is gone is ignored.
+    static func openVPNTunnel(info: [String: Any], processName: (Int32) -> String?) -> OpenVPNTunnel? {
+        guard let bsdName = info["TunnelDevice"] as? String else { return nil }
+        guard let pid = (info["PID"] as? NSNumber)?.int32Value else {
+            return OpenVPNTunnel(bsdName: bsdName, client: .unknown)
+        }
+        guard let owner = processName(pid) else { return nil }
         let client: OpenVPNClient = switch owner {
         case "openvpn": .tunnelblick
         case let name where name.hasPrefix("aws-client-vpn"): .awsVPNClient
