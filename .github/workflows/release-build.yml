@@ -102,7 +102,7 @@ jobs:
             exit 0
           fi
           gh api --method PUT "$CASK" \
-            -f message="network-menu-bar $TAG" \
+            -f message="chore: update network-menu-bar to $TAG" \
             -f content="$(base64 -w 0 new.rb)" \
             -f sha="$(jq -r .sha cask.json)" > /dev/null
           echo "Bumped network-menu-bar to $TAG" >> "$GITHUB_STEP_SUMMARY"
