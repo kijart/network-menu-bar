@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import NetworkMenuBarKit
 
@@ -13,6 +14,19 @@ private final class SwitchableReader: SystemStateReading, @unchecked Sendable {
     init(_ state: SystemState) { self.state = state }
 
     func read() -> SystemState { state }
+}
+
+private final class SlowReader: SystemStateReading, @unchecked Sendable {
+    var state: SystemState
+    var delay: TimeInterval = 0
+
+    init(_ state: SystemState) { self.state = state }
+
+    func read() -> SystemState {
+        let (state, delay) = (state, delay)
+        Thread.sleep(forTimeInterval: delay)
+        return state
+    }
 }
 
 private struct FetchFailed: Error {}
@@ -66,7 +80,7 @@ struct NetworkMonitorTests {
         #expect(monitor.publicIP == .available("85.12.34.201"))
     }
 
-    @Test func viaFollowsFullTunnelRoute() {
+    @Test func viaFollowsFullTunnelRoute() async {
         var fullTunnel = vpnOnly
         fullTunnel.addresses["en0"] = ["192.168.1.34"]
         fullTunnel.primaryInterface = "en0"
@@ -74,6 +88,7 @@ struct NetworkMonitorTests {
         let monitor = NetworkMonitor(reader: FakeReader(state: fullTunnel), publicIPFetcher: FakeFetcher([]))
 
         monitor.reloadInterfaces()
+        await monitor.readTask?.value
 
         #expect(monitor.viaInterface?.bsdName == "utun4")
     }
@@ -106,6 +121,7 @@ struct NetworkMonitorTests {
 
         monitor.refresh()
         let stale = monitor.fetchTask
+        while await fetcher.calls == 0 { await Task.yield() }
         monitor.refresh()
         await monitor.fetchTask?.value
         await stale?.value
@@ -133,6 +149,7 @@ struct NetworkMonitorTests {
         let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .seconds(60))
 
         monitor.start()
+        await monitor.readTask?.value
 
         #expect(monitor.connection == .wifi)
         #expect(monitor.publicIP == .loading(previous: nil))
@@ -170,6 +187,7 @@ struct NetworkMonitorTests {
 
         monitor.pathChanged(satisfied: false)
         await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
         monitor.pathChanged(satisfied: true)
         await monitor.pendingRefresh?.value
         await monitor.fetchTask?.value
@@ -187,11 +205,29 @@ struct NetworkMonitorTests {
 
         reader.state = vpnOnly
         monitor.reloadInterfaces()
+        await monitor.readTask?.value
 
         #expect(monitor.connection == .vpn)
         #expect(monitor.interfaces.contains { $0.bsdName == "utun4" })
         #expect(monitor.publicIP == .available("85.12.34.201"))
         #expect(await fetcher.calls == 1)
+    }
+
+    @Test func slowReadDoesNotOverwriteNewer() async {
+        let reader = SlowReader(onWifi)
+        reader.delay = 0.3
+        let monitor = NetworkMonitor(reader: reader, publicIPFetcher: FakeFetcher([]))
+
+        monitor.reloadInterfaces()
+        let slow = monitor.readTask
+        try? await Task.sleep(for: .milliseconds(50))
+        reader.state = vpnOnly
+        reader.delay = 0
+        monitor.reloadInterfaces()
+        await monitor.readTask?.value
+        await slow?.value
+
+        #expect(monitor.connection == .vpn)
     }
 
     @Test func storeWatchCoversAddressesPrimaryAndOpenVPN() throws {

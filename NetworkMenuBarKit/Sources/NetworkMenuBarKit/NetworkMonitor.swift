@@ -21,6 +21,9 @@ public final class NetworkMonitor {
     @ObservationIgnored private var pathMonitor: NWPathMonitor?
     @ObservationIgnored private var storeWatcher: DynamicStoreWatcher?
     @ObservationIgnored private var pathSatisfied = true
+    @ObservationIgnored private var readsStarted = 0
+    @ObservationIgnored private var readsApplied = 0
+    @ObservationIgnored private(set) var readTask: Task<Void, Never>?
     @ObservationIgnored private(set) var pendingRefresh: Task<Void, Never>?
     @ObservationIgnored private(set) var fetchTask: Task<Void, Never>?
 
@@ -38,7 +41,7 @@ public final class NetworkMonitor {
     /// The monitor's initial path update triggers the first public IP fetch.
     public func start() {
         guard pathMonitor == nil else { return }
-        updateInterfaces()
+        reloadInterfaces()
         let monitor = NWPathMonitor()
         monitor.pathUpdateHandler = { [weak self] path in
             let satisfied = path.status == .satisfied
@@ -56,22 +59,21 @@ public final class NetworkMonitor {
 
     /// Re-reads the interfaces without touching the public IP, e.g. when the menu opens.
     public func reloadInterfaces() {
-        updateInterfaces()
+        readTask = Task { [weak self] in await self?.updateInterfaces() }
     }
 
     /// Re-reads the interfaces now and re-fetches the public IP, superseding any fetch in flight.
     public func refresh() {
-        updateInterfaces()
-
         fetchTask?.cancel()
-        guard connection != .offline else {
-            fetchTask = nil
-            publicIP = .unavailable
-            return
-        }
-
         publicIP = .loading(previous: publicIP.address)
         fetchTask = Task { [weak self, publicIPFetcher] in
+            await self?.updateInterfaces()
+            guard !Task.isCancelled, let connection = self?.connection else { return }
+            guard connection != .offline else {
+                self?.publicIP = .unavailable
+                return
+            }
+
             let result: PublicIPState
             do {
                 result = .available(try await publicIPFetcher.fetchPublicIP())
@@ -83,8 +85,14 @@ public final class NetworkMonitor {
         }
     }
 
-    private func updateInterfaces() {
-        let state = reader.read()
+    /// Reads off the main actor, since the reader makes several synchronous IPC calls.
+    /// A read that finishes after a newer one has been applied is dropped.
+    private func updateInterfaces() async {
+        readsStarted += 1
+        let read = readsStarted
+        let state = await Task.detached { [reader] in reader.read() }.value
+        guard read > readsApplied else { return }
+        readsApplied = read
         interfaces = classify(state)
         primaryInterface = state.primaryInterface
         routeInterface = state.routeInterface
