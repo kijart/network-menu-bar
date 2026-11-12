@@ -1,4 +1,3 @@
-/// Turns raw system state into menu rows: Ethernet, then Wi-Fi, then connected VPNs.
 public func classify(_ state: SystemState) -> [NetworkInterfaceInfo] {
     ethernetRows(state) + wifiRows(state) + vpnRows(state)
 }

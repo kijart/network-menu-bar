@@ -25,7 +25,7 @@ struct SettingsView: View {
                 .tabItem { Label("About", systemImage: "info.circle") }
                 .tag(Tab.about)
         }
-        // The window keeps its view between openings; About shouldn't greet the next visit.
+        // The Settings window keeps its view between openings.
         .onDisappear { tab = .general }
     }
 

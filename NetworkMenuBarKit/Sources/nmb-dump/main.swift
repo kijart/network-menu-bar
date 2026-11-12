@@ -2,6 +2,19 @@ import Foundation
 import NetworkMenuBarKit
 import SystemConfiguration
 
+if CommandLine.arguments.contains("--help") {
+    print("""
+    Usage: nmb-dump [--raw] [--watch]
+
+    Prints the raw system state, the menu rows, the connection summary and the public IP.
+
+      --raw    Also print the State:/Network keys of the dynamic store, to identify VPN clients
+               that don't register a service (Tunnelblick, AWS VPN Client).
+      --watch  Then run the live NetworkMonitor and print every change until Ctrl-C.
+    """)
+    exit(0)
+}
+
 let state = SystemStateReader().read()
 dump(state)
 
@@ -18,8 +31,6 @@ print("active:", activeInterface(interfaces: rows, primaryInterface: state.prima
 print("via:", viaInterface(interfaces: rows, primaryInterface: state.primaryInterface, routeInterface: state.routeInterface)?.bsdName ?? "—")
 print("public:", (try? await PublicIPService().fetchPublicIP()) ?? "unavailable")
 
-// `--raw` prints the dynamic store's network state keys, to identify VPN clients
-// that don't register a service (Tunnelblick, AWS VPN Client).
 if CommandLine.arguments.contains("--raw"),
    let store = SCDynamicStoreCreate(nil, "nmb-dump" as CFString, nil, nil),
    let keys = SCDynamicStoreCopyKeyList(store, "State:/Network/.*" as CFString) as? [String] {
@@ -32,7 +43,6 @@ if CommandLine.arguments.contains("--raw"),
     }
 }
 
-// `--watch` runs the live NetworkMonitor and prints every change until interrupted.
 if CommandLine.arguments.contains("--watch") {
     setvbuf(stdout, nil, _IOLBF, 0)
     let monitor = NetworkMonitor()
