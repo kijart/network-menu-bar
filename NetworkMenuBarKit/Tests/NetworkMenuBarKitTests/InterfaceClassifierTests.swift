@@ -3,7 +3,8 @@ import Testing
 
 private let wifi = HardwarePort(bsdName: "en0", kind: .wifi, localizedName: "Wi-Fi")
 private let usbEthernet = HardwarePort(bsdName: "en7", kind: .ethernet, localizedName: "USB 10/100/1000 LAN")
-private let thunderbolt = HardwarePort(bsdName: "en1", kind: .ethernet, localizedName: "Thunderbolt 1")
+private let thunderbolt = HardwarePort(bsdName: "en1", kind: .ethernet, localizedName: "Thunderbolt 1", isBridgeMember: true)
+private let genericEthernet = HardwarePort(bsdName: "en4", kind: .ethernet, localizedName: "Ethernet Adapter (en4)")
 
 private func vpnRows(_ state: SystemState) -> [NetworkInterfaceInfo] {
     classify(state).filter { $0.kind == .vpn }
@@ -43,6 +44,25 @@ private func vpnRows(_ state: SystemState) -> [NetworkInterfaceInfo] {
     #expect(rows.count == 1)
     #expect(rows.first?.bsdName == "en7")
     #expect(rows.first?.isActive == false)
+}
+
+@Test func unpluggedEthernetPrefersANamedAdapter() {
+    let state = SystemState(hardwarePorts: [thunderbolt, genericEthernet, usbEthernet])
+
+    #expect(classify(state).filter { $0.kind == .ethernet }.map(\.bsdName) == ["en7"])
+}
+
+@Test func unpluggedEthernetPrefersAGenericAdapterOverThunderbolt() {
+    let state = SystemState(hardwarePorts: [thunderbolt, genericEthernet])
+
+    #expect(classify(state).filter { $0.kind == .ethernet }.map(\.bsdName) == ["en4"])
+}
+
+@Test func genericAdapterNameDropsTheRepeatedBSDName() throws {
+    let state = SystemState(addresses: ["en4": ["10.0.0.9"]], hardwarePorts: [genericEthernet])
+
+    let row = try #require(classify(state).first { $0.kind == .ethernet })
+    #expect(row.name == "Ethernet Adapter")
 }
 
 @Test func onlyActiveEthernetPortsAreListedWhenAnyIsUp() {

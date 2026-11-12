@@ -12,12 +12,21 @@ private func ethernetRows(_ state: SystemState) -> [NetworkInterfaceInfo] {
         NetworkInterfaceInfo(
             bsdName: port.bsdName,
             kind: .ethernet,
-            name: port.localizedName,
+            name: port.localizedName.replacingOccurrences(of: " (\(port.bsdName))", with: ""),
             ipv4: usableIPv4(port.bsdName, in: state)
         )
     }
     let active = rows.filter(\.isActive)
-    return active.isEmpty ? Array(rows.prefix(1)) : active
+    guard active.isEmpty else { return active }
+    let placeholder = zip(ports, rows).min { placeholderRank($0.0) < placeholderRank($1.0) }
+    return placeholder.map { [$0.1] } ?? []
+}
+
+/// The greyed row shown while no Ethernet is connected stands for a real adapter when there is one:
+/// named adapters first, then generic "Ethernet Adapter (enN)" ones, then Thunderbolt Bridge ports.
+private func placeholderRank(_ port: HardwarePort) -> Int {
+    if port.isBridgeMember { return 2 }
+    return port.localizedName.hasSuffix("(\(port.bsdName))") ? 1 : 0
 }
 
 private func wifiRows(_ state: SystemState) -> [NetworkInterfaceInfo] {

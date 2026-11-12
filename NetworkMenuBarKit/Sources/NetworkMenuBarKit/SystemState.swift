@@ -7,11 +7,14 @@ public struct HardwarePort: Sendable, Equatable {
     public let bsdName: String
     public let kind: HardwareKind
     public let localizedName: String
+    /// Part of a bridge such as Thunderbolt Bridge, not a standalone network adapter.
+    public let isBridgeMember: Bool
 
-    public init(bsdName: String, kind: HardwareKind, localizedName: String) {
+    public init(bsdName: String, kind: HardwareKind, localizedName: String, isBridgeMember: Bool = false) {
         self.bsdName = bsdName
         self.kind = kind
         self.localizedName = localizedName
+        self.isBridgeMember = isBridgeMember
     }
 }
 

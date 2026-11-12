@@ -69,6 +69,7 @@ public struct SystemStateReader: SystemStateReading {
 
     static func hardwarePorts() -> [HardwarePort] {
         guard let interfaces = SCNetworkInterfaceCopyAll() as? [SCNetworkInterface] else { return [] }
+        let bridgeMembers = bridgeMemberNames()
         return interfaces.compactMap { interface in
             guard let bsdName = SCNetworkInterfaceGetBSDName(interface) as String?,
                   let type = SCNetworkInterfaceGetInterfaceType(interface) else { return nil }
@@ -79,8 +80,16 @@ public struct SystemStateReader: SystemStateReading {
             default: return nil
             }
             let name = SCNetworkInterfaceGetLocalizedDisplayName(interface) as String? ?? bsdName
-            return HardwarePort(bsdName: bsdName, kind: kind, localizedName: name)
+            return HardwarePort(bsdName: bsdName, kind: kind, localizedName: name, isBridgeMember: bridgeMembers.contains(bsdName))
         }
+    }
+
+    /// Bridge APIs are private, so the members are read from the network preferences.
+    static func bridgeMemberNames() -> Set<String> {
+        guard let preferences = SCPreferencesCreate(nil, "NetworkMenuBar" as CFString, nil),
+              let virtual = SCPreferencesGetValue(preferences, "VirtualNetworkInterfaces" as CFString) as? [String: Any],
+              let bridges = virtual["Bridge"] as? [String: [String: Any]] else { return [] }
+        return Set(bridges.values.flatMap { $0["Interfaces"] as? [String] ?? [] })
     }
 
     static func vpnServices(store: SCDynamicStore) -> [VPNService] {
