@@ -104,6 +104,10 @@ The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://check
 
 This project was developed with the help of AI coding assistants, used to generate and refactor code. All code has been manually reviewed and tested; the design, decisions and responsibility remain with the author.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), including how to add a language.
+
 ## License
 
 [MIT](LICENSE)

@@ -23,6 +23,12 @@ enum AppLanguage: String, CaseIterable {
     case english = "en"
     case spanish = "es"
 
+    /// The language's name in itself, e.g. "Español", whatever language the app runs in.
+    var nativeName: String {
+        let locale = Locale(identifier: rawValue)
+        return locale.localizedString(forIdentifier: rawValue)?.capitalized(with: locale) ?? rawValue
+    }
+
     /// Overrides the app's language from the next launch on.
     func apply() {
         if self == .system {

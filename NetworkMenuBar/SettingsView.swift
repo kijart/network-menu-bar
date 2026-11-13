@@ -70,8 +70,9 @@ struct SettingsView: View {
                 }
                 Picker("Language", selection: $language) {
                     Text("System").tag(AppLanguage.system)
-                    Text(verbatim: "English").tag(AppLanguage.english)
-                    Text(verbatim: "Español").tag(AppLanguage.spanish)
+                    ForEach(AppLanguage.allCases.filter { $0 != .system }, id: \.self) { language in
+                        Text(verbatim: language.nativeName).tag(language)
+                    }
                 }
                 .onChange(of: language) { _, language in language.apply() }
             } footer: {
