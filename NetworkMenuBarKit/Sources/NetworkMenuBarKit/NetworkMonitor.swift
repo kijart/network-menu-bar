@@ -21,6 +21,7 @@ public final class NetworkMonitor {
     @ObservationIgnored private var pathMonitor: NWPathMonitor?
     @ObservationIgnored private var storeWatcher: DynamicStoreWatcher?
     @ObservationIgnored private var pathSatisfied = true
+    @ObservationIgnored private var session = 0
     @ObservationIgnored private var readsStarted = 0
     @ObservationIgnored private var readsApplied = 0
     @ObservationIgnored private(set) var readTask: Task<Void, Never>?
@@ -41,20 +42,40 @@ public final class NetworkMonitor {
     /// The monitor's initial path update triggers the first public IP fetch.
     public func start() {
         guard pathMonitor == nil else { return }
+        session += 1
+        let session = session
         reloadInterfaces()
         let monitor = NWPathMonitor()
         monitor.pathUpdateHandler = { [weak self] path in
             let satisfied = path.status == .satisfied
-            Task { @MainActor in self?.pathChanged(satisfied: satisfied) }
+            Task { @MainActor in
+                guard let self, self.session == session else { return }
+                self.pathChanged(satisfied: satisfied)
+            }
         }
         monitor.start(queue: DispatchQueue(label: "NetworkMonitor.path"))
         pathMonitor = monitor
 
         let watcher = DynamicStoreWatcher { [weak self] in
-            Task { @MainActor in self?.scheduleRefresh() }
+            Task { @MainActor in
+                guard let self, self.session == session else { return }
+                self.scheduleRefresh()
+            }
         }
         watcher.start()
         storeWatcher = watcher
+    }
+
+    /// Stops watching for network changes and cancels any pending refresh, read or fetch.
+    /// The last published values stay; `start()` can be called again.
+    public func stop() {
+        session += 1
+        pathMonitor?.cancel()
+        pathMonitor = nil
+        storeWatcher = nil
+        pendingRefresh?.cancel()
+        readTask?.cancel()
+        fetchTask?.cancel()
     }
 
     /// Re-reads the interfaces without touching the public IP, e.g. when the menu opens.
@@ -86,12 +107,12 @@ public final class NetworkMonitor {
     }
 
     /// Reads off the main actor, since the reader makes several synchronous IPC calls.
-    /// A read that finishes after a newer one has been applied is dropped.
+    /// A read that finishes after a newer one has been applied, or after a cancellation, is dropped.
     private func updateInterfaces() async {
         readsStarted += 1
         let read = readsStarted
         let state = await Task.detached { [reader] in reader.read() }.value
-        guard read > readsApplied else { return }
+        guard !Task.isCancelled, read > readsApplied else { return }
         readsApplied = read
         interfaces = classify(state)
         primaryInterface = state.primaryInterface

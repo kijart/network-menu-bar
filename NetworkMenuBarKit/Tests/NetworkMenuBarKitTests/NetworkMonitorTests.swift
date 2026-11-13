@@ -156,6 +156,45 @@ struct NetworkMonitorTests {
         #expect(await fetcher.calls == 0)
     }
 
+    @Test func stopIgnoresLaterNetworkChanges() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.start()
+        monitor.stop()
+        try? await Task.sleep(for: .milliseconds(300))
+
+        #expect(await fetcher.calls == 0)
+        #expect(monitor.publicIP == .loading(previous: nil))
+    }
+
+    @Test func startAfterStopWatchesAgain() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.start()
+        monitor.stop()
+        monitor.start()
+        for _ in 0..<100 where monitor.publicIP != .available("85.12.34.201") {
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+
+        #expect(monitor.publicIP == .available("85.12.34.201"))
+        #expect(await fetcher.calls == 1)
+    }
+
+    @Test func stopCancelsAFetchInFlight() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .milliseconds(100))])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher)
+
+        monitor.refresh()
+        while await fetcher.calls == 0 { await Task.yield() }
+        monitor.stop()
+        await monitor.fetchTask?.value
+
+        #expect(monitor.publicIP == .loading(previous: nil))
+    }
+
     @Test func offlineBecomesUnavailableWithoutFetching() async {
         let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
         let monitor = NetworkMonitor(reader: FakeReader(state: offline), publicIPFetcher: fetcher)
