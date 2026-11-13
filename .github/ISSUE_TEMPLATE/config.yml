@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/kijart/network-menu-bar/security/advisories/new
+    about: Report it privately, as described in the security policy. Not in a public issue.
+  - name: Add or fix a translation
+    url: https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md#translations
+    about: Translations go straight to a pull request; the contributing guide lists the steps.

@@ -1,0 +1,30 @@
+name: Feature request
+description: An idea to make the app more useful.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is hard or missing today, and when it comes up.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: What the app would do. A sketch or a screenshot of a similar app helps.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Other ways to solve it, or how it is worked around today.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I have read [CONTRIBUTING.md](https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md) and searched the existing issues.
+          required: true

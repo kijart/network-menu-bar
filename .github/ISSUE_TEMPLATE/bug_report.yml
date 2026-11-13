@@ -1,0 +1,74 @@
+name: Bug report
+description: Something shows wrongly or doesn't work.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Security problems are reported privately instead: see the [security policy](https://github.com/kijart/network-menu-bar/security/policy).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What the menu or the app shows, and what was expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Connect to Wi‑Fi and a WireGuard VPN
+        2. Open the menu
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: Shown in Settings → About.
+      placeholder: "0.2.0"
+    validations:
+      required: true
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      placeholder: "15.4"
+    validations:
+      required: true
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installed from
+      options:
+        - Disk image from GitHub Releases
+        - Homebrew
+        - Built from source
+    validations:
+      required: true
+  - type: textarea
+    id: network
+    attributes:
+      label: Network setup
+      description: The networks involved, e.g. Ethernet through a USB adapter, Wi‑Fi, and the VPN client (WireGuard, Tunnelblick, AWS VPN Client…).
+  - type: textarea
+    id: nmb-dump
+    attributes:
+      label: nmb-dump output
+      description: |
+        For a network that shows wrongly, the output of `swift run --package-path NetworkMenuBarKit nmb-dump --raw` from a clone of the repository (see [CONTRIBUTING.md](https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md#running-the-app-locally)). Mask the IP addresses if needed.
+      render: text
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: A screenshot of the menu or the Settings window, if it helps.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I have read [CONTRIBUTING.md](https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md), this is not a security problem, and it happens with the latest release.
+          required: true

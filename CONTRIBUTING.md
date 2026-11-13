@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions are welcome, and translations are the easiest way to help: a new language, or a fix to a string that reads wrong. Bug reports and small fixes are welcome too. For larger changes, please open an issue first to agree on the approach.
+Contributions are welcome, and translations are the easiest way to help: a new language, or a fix to a string that reads wrong. Bug reports and small fixes are welcome too: [new issues](https://github.com/kijart/network-menu-bar/issues/new/choose) start from a short form for each. For larger changes, please open an issue first to agree on the approach.
 
 Security problems are not reported in issues: see [SECURITY.md](SECURITY.md).
 
@@ -21,7 +21,7 @@ The network detection lives in the `NetworkMenuBarKit` package and can be checke
 swift run --package-path NetworkMenuBarKit nmb-dump --watch
 ```
 
-A bug report about a network that shows wrongly is much easier to act on with its `nmb-dump` output (IP addresses can be masked).
+A bug report about a network that shows wrongly is much easier to act on with its `nmb-dump --raw` output, which the bug report form asks for (IP addresses can be masked).
 
 ## Translations
 
