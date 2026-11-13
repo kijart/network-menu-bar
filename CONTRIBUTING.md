@@ -2,6 +2,8 @@
 
 Issues and pull requests are welcome. See [Build from source](README.md#build-from-source) to set up the project, and run `make test` before opening a pull request.
 
+Security problems are not reported in issues: see [SECURITY.md](SECURITY.md).
+
 ## Adding a language
 
 The app is localized with a String Catalog. A new language touches four places; the steps below use French (`fr`) as the example.
