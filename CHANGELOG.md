@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.0](https://github.com/kijart/network-menu-bar/compare/0.2.0...0.3.0) (2026-11-13)
+
+
+### Features
+
+* add NetworkMonitor.stop() ([a9d26d9](https://github.com/kijart/network-menu-bar/commit/a9d26d967049759eafb755658d5971b544c28140))
+
+
+### Bug Fixes
+
+* ignore the OpenVPN state key when its client process is gone ([3cccbce](https://github.com/kijart/network-menu-bar/commit/3cccbce7cac0fe1f439c04c0684bb7b4a20927a0))
+* prefer real adapters for the unplugged Ethernet row and drop repeated BSD names ([ad9bf37](https://github.com/kijart/network-menu-bar/commit/ad9bf37f881457bb0f07d09980e239cf38c13784))
+
+
+### Performance
+
+* read the network state off the main actor ([d8d5b9f](https://github.com/kijart/network-menu-bar/commit/d8d5b9f398854e3fbbf8acbf9dd3b592a9b8684c))
+
 ## [0.2.0](https://github.com/kijart/network-menu-bar/compare/0.1.1...0.2.0) (2026-11-11)
 
 
