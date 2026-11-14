@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>try { const theme = localStorage.getItem("theme"); if (theme) document.documentElement.dataset.theme = theme; } catch {}</script>
+  <title>Network Menu Bar: IP and VPN status in the macOS menu bar</title>
+  <meta name="description" content="Free, open-source macOS menu bar app that shows the public and private IP addresses, Ethernet, Wi‑Fi and VPN status, and which network the traffic uses.">
+  <link rel="canonical" href="https://kijart.github.io/network-menu-bar/">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Network Menu Bar">
+  <meta property="og:title" content="Network Menu Bar: IP and VPN status in the macOS menu bar">
+  <meta property="og:description" content="Free, open-source macOS menu bar app that shows the public and private IP addresses, Ethernet, Wi‑Fi and VPN status, and which network the traffic uses.">
+  <meta property="og:url" content="https://kijart.github.io/network-menu-bar/">
+  <meta property="og:image" content="https://kijart.github.io/network-menu-bar/images/og-image.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="Network Menu Bar: know how you're connected, at a glance">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Network Menu Bar",
+  "description": "Free, open-source macOS menu bar app that shows the public and private IP addresses, Ethernet, Wi‑Fi and VPN status, and which network the traffic uses.",
+  "url": "https://kijart.github.io/network-menu-bar/",
+  "operatingSystem": "macOS 14 Sonoma or later",
+  "applicationCategory": "UtilitiesApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "license": "https://opensource.org/licenses/MIT",
+  "downloadUrl": "https://github.com/kijart/network-menu-bar/releases/latest",
+  "installUrl": "https://github.com/kijart/network-menu-bar#installation",
+  "softwareHelp": "https://github.com/kijart/network-menu-bar#readme",
+  "image": "https://kijart.github.io/network-menu-bar/images/og-image.png",
+  "screenshot": [
+    "https://kijart.github.io/network-menu-bar/images/menu-detailed-light.png",
+    "https://kijart.github.io/network-menu-bar/images/menu-compact-dark.png"
+  ],
+  "publisher": {
+    "@type": "Person",
+    "name": "kijart",
+    "url": "https://github.com/kijart"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "kijart",
+    "url": "https://github.com/kijart"
+  },
+  "sameAs": [
+    "https://github.com/kijart/network-menu-bar"
+  ]
+}
+  </script>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/atoms.css">
+  <link rel="stylesheet" href="css/molecules.css">
+  <link rel="stylesheet" href="css/organisms.css">
+  <link rel="stylesheet" href="css/templates.css">
+</head>
+<body>
+  <header class="o-header">
+    <div class="o-header__inner t-container">
+      <a class="o-header__brand" href="./">
+        <img class="a-icon a-icon--brand" src="images/icon.png" alt="" aria-hidden="true" width="24" height="24">
+        Network Menu Bar
+      </a>
+      <nav aria-label="Sections">
+        <ul class="m-nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#privacy">Privacy</a></li>
+          <li><a href="https://github.com/kijart/network-menu-bar">GitHub</a></li>
+        </ul>
+      </nav>
+      <button class="a-icon-button o-header__theme" type="button" aria-label="Dark theme" aria-pressed="false" hidden>
+        <svg class="o-header__theme-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+        <svg class="o-header__theme-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="t-landing">
+    <section class="o-hero">
+      <div class="t-container">
+        <img class="a-icon a-icon--app" src="images/icon.png" alt="Network Menu Bar app icon" width="104" height="104">
+        <h1>Know how you're connected.<br> At a glance.</h1>
+        <p class="o-hero__lead">Ethernet, Wi‑Fi and VPN status — and every IP address that matters — one click away in the macOS menu bar.</p>
+        <div class="o-hero__actions">
+          <a class="a-button a-button--primary" href="https://github.com/kijart/network-menu-bar/releases/latest">Download for macOS</a>
+          <div class="m-copy-command">
+            <code class="a-code">brew install --cask kijart/tap/network-menu-bar</code>
+            <button class="a-button a-button--small m-copy-command__button" type="button" hidden>Copy</button>
+            <span class="m-copy-command__status" aria-live="polite"></span>
+          </div>
+        </div>
+        <p class="o-hero__meta">Free and open source · macOS 14 Sonoma or later</p>
+        <div class="o-hero__shots">
+          <picture>
+            <source srcset="images/menu-detailed-light.webp" type="image/webp">
+            <img class="a-screenshot" src="images/menu-detailed-light.png" alt="Detailed layout in light mode: public IP 203.0.113.42 via Home Lab, then Ethernet, Wi‑Fi and the Home Lab VPN with their private IPs" width="564" height="626">
+          </picture>
+          <picture>
+            <source srcset="images/menu-compact-dark.webp" type="image/webp">
+            <img class="a-screenshot" src="images/menu-compact-dark.png" alt="Compact layout in dark mode with the public IP and one row per network" width="564" height="485">
+          </picture>
+        </div>
+      </div>
+    </section>
+
+    <section class="o-stats" aria-label="In numbers">
+      <ul class="o-stats__grid t-container">
+        <li class="m-stat"><span class="m-stat__value">0 %</span><span class="m-stat__label">CPU when nothing changes</span></li>
+        <li class="m-stat"><span class="m-stat__value">17 MB</span><span class="m-stat__label">of memory after launch</span></li>
+        <li class="m-stat"><span class="m-stat__value">1</span><span class="m-stat__label">small HTTPS request when the way out to the internet changes</span></li>
+        <li class="m-stat"><span class="m-stat__value">0</span><span class="m-stat__label">dependencies, accounts or analytics</span></li>
+      </ul>
+    </section>
+
+    <section class="o-feature-grid t-section" id="features">
+      <div class="t-container">
+        <div class="t-section__head">
+          <h2>Everything about the connection. Nothing more.</h2>
+          <p>No Terminal, no System Settings, no guessing which VPN is up.</p>
+        </div>
+        <ul class="o-feature-grid__cards">
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+            <h3>Public and private IPs</h3>
+            <p>The public IP on top, then the private IPv4 of every network. Click any of them to copy it.</p>
+          </li>
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+            <h3>Your VPNs, by name</h3>
+            <p>WireGuard, OpenVPN Connect, Tailscale and other network-extension VPNs after their profile, plus Tunnelblick and AWS VPN Client.</p>
+          </li>
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a4 4 0 0 0 0-8h-4a4 4 0 0 1 0-8h6"/></svg></span>
+            <h3>Where the traffic goes</h3>
+            <p>In the detailed layout, shows which network the public IP exits through, with split‑ and full‑tunnel VPNs alike.</p>
+          </li>
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
+            <h3>Updates itself</h3>
+            <p>About half a second after a cable is plugged in, the Wi‑Fi changes or a VPN connects. No polling.</p>
+          </li>
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <h3>Compact or detailed</h3>
+            <p>Pick the layout, hide the network icons, and optionally show an IP next to the menu bar icon.</p>
+          </li>
+          <li class="m-feature-card">
+            <span class="m-feature-card__icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>
+            <h3>Native and tiny</h3>
+            <p>SwiftUI, about 2 MB, no Dock icon. Launches at login. In English and Spanish.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="o-spotlight t-section">
+      <div class="o-spotlight__inner t-container">
+        <div>
+          <p class="o-spotlight__eyebrow">Built for people who live on VPNs</p>
+          <h2>Which network is your traffic really using?</h2>
+          <p class="o-spotlight__text">With a VPN up, the Mac has several addresses and only one of them reaches the internet. Network Menu Bar asks the system where the traffic leaves and says so. In the detailed layout, “via Home Lab” appears right under the public IP.</p>
+          <ul class="m-chip-list" aria-label="Recognised VPN clients">
+            <li class="a-chip">WireGuard</li>
+            <li class="a-chip">OpenVPN Connect</li>
+            <li class="a-chip">Tailscale</li>
+            <li class="a-chip">Tunnelblick</li>
+            <li class="a-chip">AWS VPN Client</li>
+            <li class="a-chip">Any other: VPN (utunN)</li>
+          </ul>
+        </div>
+        <picture>
+          <source srcset="images/spotlight-via.webp" type="image/webp">
+          <img class="a-screenshot" src="images/spotlight-via.png" alt="Close-up of the menu: public IP 203.0.113.42 via Home Lab, above the Ethernet, Wi‑Fi and Home Lab rows" width="564" height="372" loading="lazy">
+        </picture>
+      </div>
+    </section>
+
+    <section class="o-install t-section" id="install">
+      <div class="t-container">
+        <div class="t-section__head">
+          <h2>Install in a minute</h2>
+          <p>Requires macOS 14 Sonoma or later.</p>
+        </div>
+        <div class="o-install__panels">
+          <div class="m-install-panel">
+            <h3>Homebrew <span class="a-badge">Recommended</span></h3>
+            <p>Installs, updates with the other casks and skips the Gatekeeper prompt.</p>
+            <div class="m-copy-command">
+              <code class="a-code">brew install --cask kijart/tap/network-menu-bar</code>
+              <button class="a-button a-button--small m-copy-command__button" type="button" hidden>Copy</button>
+              <span class="m-copy-command__status" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="m-install-panel">
+            <h3>Disk image</h3>
+            <ol>
+              <li>Download the <code class="a-code">.dmg</code> and drag the app to Applications.</li>
+              <li>macOS 15 or later: open the app once, then click Open Anyway in System Settings → Privacy &amp; Security. macOS 14: right‑click the app and choose Open.</li>
+            </ol>
+            <div class="m-install-panel__actions">
+              <a class="a-button a-button--primary" href="https://github.com/kijart/network-menu-bar/releases/latest">Download .dmg</a>
+            </div>
+            <p class="m-install-panel__note">The release page also lists the SHA‑256 checksum of each disk image.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="o-privacy t-section" id="privacy">
+      <div class="t-container">
+        <h2>Your network stays on the Mac.</h2>
+        <p>The only request the app makes is an HTTPS lookup of the public IP: at launch, when the way out to the internet changes, or on Refresh. No analytics, no accounts, no timers — and <a href="https://github.com/kijart/network-menu-bar">the code</a> is open for anyone to check.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="o-footer">
+    <div class="o-footer__inner t-container">
+      <span>MIT License</span>
+      <ul class="m-nav-links">
+        <li><a href="https://github.com/kijart/network-menu-bar">GitHub</a></li>
+        <li><a href="https://github.com/kijart/network-menu-bar/releases">Releases</a></li>
+        <li><a href="https://github.com/kijart/network-menu-bar/issues">Issues</a></li>
+        <li><a href="https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md">Contributing</a></li>
+        <li><a href="https://github.com/kijart/network-menu-bar/security/policy">Security</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script src="js/copy.js" defer></script>
+  <script src="js/theme.js" defer></script>
+</body>
+</html>

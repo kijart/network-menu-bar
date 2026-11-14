@@ -1,0 +1,38 @@
+# Network Menu Bar
+
+> Free, open-source (MIT) macOS menu bar app that shows how the Mac is connected: Ethernet, Wi‑Fi and VPN status, the public IP and the private IPv4 of every network, and which network the public IP exits through. Native SwiftUI, no dependencies, no accounts, no analytics. Requires macOS 14 Sonoma or later.
+
+## What it does
+
+- Shows the public IP on top and the private IPv4 of every network below it; clicking an address copies it.
+- Names VPNs: network-extension VPNs (WireGuard, OpenVPN Connect, Tailscale and others) after their profile, plus Tunnelblick and AWS VPN Client; unknown tunnels show as "VPN (utunN)".
+- Shows which network the public IP leaves through ("via") in the detailed layout, with split- and full-tunnel VPNs.
+- Refreshes about half a second after a network change; no polling.
+- Compact or detailed layout, optional IP next to the menu bar icon, launch at login, English and Spanish.
+
+## Resource usage
+
+About 17 MB of memory after launch, 0 % CPU and no wake-ups while nothing changes, one small HTTPS request when the way out to the internet changes. About 2 MB installed.
+
+## Install
+
+- Homebrew: `brew install --cask kijart/tap/network-menu-bar`
+- Disk image: download the latest `.dmg` from GitHub Releases and drag the app to Applications. The app is ad-hoc signed and not notarized, so macOS asks for confirmation on first launch.
+
+## Privacy
+
+The only network request is an HTTPS lookup of the public IP (checkip.amazonaws.com, with api.ipify.org and ipv4.icanhazip.com as fallbacks), at launch, when the way out to the internet changes, or on Refresh.
+
+## Limitations
+
+- IPv4 only.
+- Tunnelblick and AWS VPN Client tunnels appear only while connected, and only one of them can be identified at a time.
+- The Wi‑Fi network name is shown only when macOS provides it without Location access.
+
+## Links
+
+- [Website](https://kijart.github.io/network-menu-bar/)
+- [README](https://github.com/kijart/network-menu-bar#readme)
+- [Latest release](https://github.com/kijart/network-menu-bar/releases/latest)
+- [Contributing](https://github.com/kijart/network-menu-bar/blob/master/CONTRIBUTING.md)
+- [Security policy](https://github.com/kijart/network-menu-bar/blob/master/SECURITY.md)

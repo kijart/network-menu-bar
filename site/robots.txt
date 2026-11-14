@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kijart.github.io/network-menu-bar/sitemap.xml

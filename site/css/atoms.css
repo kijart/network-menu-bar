@@ -1,0 +1,105 @@
+.a-icon {
+  flex: none;
+}
+
+.a-icon--brand {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.a-icon--app {
+  width: 6.5rem;
+  height: 6.5rem;
+  margin-inline: auto;
+}
+
+.a-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: var(--space-3) var(--space-5);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-m);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.a-button:hover {
+  text-decoration: none;
+}
+
+.a-button--primary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.a-button--primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.a-button--small {
+  min-height: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-s);
+  font-size: var(--text-xs);
+}
+
+.a-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+}
+
+.a-chip {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+
+.a-badge {
+  display: inline-block;
+  padding: 0.125rem var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.a-screenshot {
+  border-radius: var(--radius-l);
+  outline: 1px solid var(--color-shot-border);
+  outline-offset: -1px;
+  box-shadow: var(--shadow-shot);
+}
+
+.a-icon-button {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.a-icon-button:hover {
+  background: var(--color-tint);
+  color: var(--color-text);
+}
+
+.a-icon-button svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}

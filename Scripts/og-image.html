@@ -1,0 +1,39 @@
+<!doctype html>
+<!--
+  Social preview for the landing page and the repository (1280×640). Render it with:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+    --window-size=1280,640 --screenshot=site/images/og-image.png "file://$PWD/Scripts/og-image.html"
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    display: grid;
+    grid-template-columns: 1fr 520px;
+    align-items: center;
+    gap: 40px;
+    padding: 0 72px;
+    box-sizing: border-box;
+    background: radial-gradient(1100px 600px at 30% -20%, #dbe9ff 0%, #f6f8fc 55%, #ffffff 100%);
+    color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+  }
+  .brand { display: flex; align-items: center; gap: 16px; font-size: 30px; font-weight: 600; }
+  .brand img { width: 88px; height: 88px; }
+  h1 { margin: 36px 0 0; font-size: 60px; line-height: 1.04; letter-spacing: -0.02em; }
+  p { margin: 22px 0 0; font-size: 26px; line-height: 1.35; color: #515154; }
+  .shot { align-self: end; }
+  .shot img { display: block; width: 100%; border-radius: 22px 22px 0 0; box-shadow: 0 30px 70px rgba(0, 40, 120, 0.22); }
+</style>
+</head>
+<body>
+  <div>
+    <div class="brand"><img src="../site/images/icon.png" alt="">Network Menu Bar</div>
+    <h1>Know how<br>you're connected.<br>At a glance.</h1>
+    <p>Ethernet, Wi‑Fi, VPNs and every IP address in the macOS menu bar.</p>
+  </div>
+  <div class="shot"><img src="../site/images/spotlight-via.png" alt=""></div>
+</body>
+</html>

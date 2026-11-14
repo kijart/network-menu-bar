@@ -1,0 +1,40 @@
+.t-container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.t-landing {
+  overflow-x: clip;
+}
+
+.t-section {
+  padding-block: var(--space-8);
+}
+
+.t-section__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-7);
+  text-align: center;
+}
+
+.t-section__head h2 {
+  font-size: var(--text-2xl);
+}
+
+.t-section__head p {
+  margin-top: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--text-l);
+}
+
+@media (max-width: 40rem) {
+  .t-container {
+    padding-inline: var(--space-4);
+  }
+
+  .t-section {
+    padding-block: var(--space-7);
+  }
+}

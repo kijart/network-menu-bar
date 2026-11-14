@@ -1,0 +1,65 @@
+:root {
+  color-scheme: light dark;
+
+  --color-bg: light-dark(#ffffff, #000000);
+  --color-text: light-dark(#1d1d1f, #f5f5f7);
+  --color-muted: light-dark(#515154, #a1a1a6);
+  --color-soft: light-dark(#6e6e73, #86868b);
+  --color-line: light-dark(#e3e6ec, #2c2c2e);
+  --color-tint: light-dark(#f5f7fb, #161617);
+  --color-surface: light-dark(#ffffff, #1c1c1e);
+  --color-accent: light-dark(#0071e3, #2997ff);
+  --color-accent-hover: light-dark(#0062c4, #4aa8ff);
+  --color-on-accent: light-dark(#ffffff, #00172e);
+  --color-code-bg: light-dark(#1d1d1f, #1c1c1e);
+  --color-code-text: #f5f5f7;
+  --color-code-button: #3a3a3c;
+  --color-band-bg: light-dark(#1d1d1f, #1c1c1e);
+  --color-band-text: #f5f5f7;
+  --color-band-muted: #a1a1a6;
+  --color-success: light-dark(#1a7f37, #4ad66d);
+  --color-success-bg: light-dark(#e8f6ec, #0f2a17);
+  --color-hero-glow: light-dark(#dbe9ff, #0b2547);
+  --color-hero-mid: light-dark(#f6f8fc, #05070c);
+  --color-focus: light-dark(#0071e3, #2997ff);
+  --color-shot-border: light-dark(transparent, #3a3a3c);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: clamp(1.75rem, 1.2rem + 2.2vw, 2.375rem);
+  --text-3xl: clamp(2.25rem, 1.4rem + 3.6vw, 3.5rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 5rem;
+
+  --radius-s: 0.375rem;
+  --radius-m: 0.75rem;
+  --radius-l: 1.125rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-shot: 0 24px 60px light-dark(rgb(0 40 120 / 0.18), rgb(0 0 0 / 0.55));
+
+  --container: 65rem;
+  --header-height: 3.5rem;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
