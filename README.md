@@ -28,7 +28,7 @@
 - **Knows where the traffic goes** — the detailed layout shows which network the public IP exits through, with split‑ and full‑tunnel VPNs alike.
 - **Updates itself** — refreshes about half a second after a cable is plugged in, the Wi‑Fi changes or a VPN connects. No polling.
 - **Compact or detailed** — pick the layout, hide the network icons, and optionally show the public or private IP next to the menu bar icon.
-- **Native and lightweight** — SwiftUI, no dependencies, no Dock icon. Launches at login once installed in the Applications folder.
+- **Native and lightweight** — SwiftUI, no dependencies, no Dock icon, [0 % CPU when nothing changes](#resource-usage). Launches at login once installed in the Applications folder.
 - **English and Spanish.**
 
 ## Requirements
@@ -92,7 +92,19 @@ The **About** tab shows the installed version and a link to this repository.
 
 ## Privacy
 
-The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://checkip.amazonaws.com), falling back to [api.ipify.org](https://www.ipify.org) and [ipv4.icanhazip.com](https://icanhazip.com). The lookup only happens at launch, on a network change or on **Refresh** — never on a timer. Nothing else leaves the Mac: no analytics, no accounts.
+The public IP is looked up over HTTPS from [checkip.amazonaws.com](https://checkip.amazonaws.com), falling back to [api.ipify.org](https://www.ipify.org) and [ipv4.icanhazip.com](https://icanhazip.com). The lookup only happens at launch, when the way out to the internet changes (network, router, full‑tunnel VPN) or on **Refresh** — never on a timer. Nothing else leaves the Mac: no analytics, no accounts.
+
+## Resource usage
+
+Measured on a MacBook Pro (M1 Pro) with macOS 26, using `footprint`, `top` and the system's network logs, while connecting and disconnecting WireGuard, OpenVPN Connect, Tunnelblick and AWS VPN Client and turning Wi‑Fi off and on:
+
+|                            |                                                                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Memory                     | about 17 MB after launch, 35–40 MB once the menu and Settings have been opened                                                                                     |
+| CPU while nothing changes  | 0 %, with no wake‑ups                                                                                                                                              |
+| CPU during network changes | about 1 % on average, briefly up to 13 %                                                                                                                           |
+| Network                    | one HTTPS request of a few hundred bytes when the way out to the internet changes (a full‑tunnel VPN, another network, offline and back), plus one per **Refresh** |
+| Size                       | 2.2 MB installed, 1.3 MB disk image                                                                                                                                |
 
 ## Known limitations
 
