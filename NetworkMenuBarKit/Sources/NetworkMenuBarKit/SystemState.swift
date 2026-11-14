@@ -56,6 +56,8 @@ public struct SystemState: Sendable, Equatable {
     public var primaryInterface: String?
     /// The interface the kernel routes a public address through.
     public var routeInterface: String?
+    /// The primary interface's gateway.
+    public var router: String?
     public var openVPNTunnel: OpenVPNTunnel?
     public var wifiSSID: String?
 
@@ -65,6 +67,7 @@ public struct SystemState: Sendable, Equatable {
         vpnServices: [VPNService] = [],
         primaryInterface: String? = nil,
         routeInterface: String? = nil,
+        router: String? = nil,
         openVPNTunnel: OpenVPNTunnel? = nil,
         wifiSSID: String? = nil
     ) {
@@ -73,6 +76,7 @@ public struct SystemState: Sendable, Equatable {
         self.vpnServices = vpnServices
         self.primaryInterface = primaryInterface
         self.routeInterface = routeInterface
+        self.router = router
         self.openVPNTunnel = openVPNTunnel
         self.wifiSSID = wifiSSID
     }

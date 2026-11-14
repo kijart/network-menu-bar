@@ -9,12 +9,14 @@ public struct SystemStateReader: SystemStateReading {
     public func read() -> SystemState {
         let store = SCDynamicStoreCreate(nil, "NetworkMenuBar" as CFString, nil, nil)
         let addresses = Self.ipv4Addresses()
+        let global = store.flatMap { SCDynamicStoreCopyValue($0, "State:/Network/Global/IPv4" as CFString) as? [String: Any] }
         return SystemState(
             addresses: addresses,
             hardwarePorts: Self.hardwarePorts(),
             vpnServices: store.map(Self.vpnServices) ?? [],
-            primaryInterface: store.flatMap(Self.primaryInterface),
+            primaryInterface: global?["PrimaryInterface"] as? String,
             routeInterface: Self.routeInterface(addresses: addresses),
+            router: global?["Router"] as? String,
             openVPNTunnel: store.flatMap(Self.openVPNTunnel),
             wifiSSID: CWWiFiClient.shared().interface()?.ssid()
         )
@@ -118,11 +120,6 @@ public struct SystemStateReader: SystemStateReading {
               let status = SCNetworkConnectionCopyExtendedStatus(connection) as? [String: Any],
               let ipv4 = status["IPv4"] as? [String: Any] else { return nil }
         return ipv4["InterfaceName"] as? String
-    }
-
-    static func primaryInterface(store: SCDynamicStore) -> String? {
-        let global = SCDynamicStoreCopyValue(store, "State:/Network/Global/IPv4" as CFString) as? [String: Any]
-        return global?["PrimaryInterface"] as? String
     }
 
     static func openVPNTunnel(store: SCDynamicStore) -> OpenVPNTunnel? {

@@ -144,6 +144,99 @@ struct NetworkMonitorTests {
         #expect(monitor.publicIP == .available("85.12.34.201"))
     }
 
+    @Test func unchangedStateDoesNotLookUpAgain() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero), (.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 1)
+        #expect(monitor.publicIP == .available("85.12.34.201"))
+    }
+
+    @Test func unrelatedChangeKeepsTheLookupInFlight() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .milliseconds(200)), (.success("1.1.1.1"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 1)
+        #expect(monitor.publicIP == .available("85.12.34.201"))
+    }
+
+    @Test func fullTunnelVPNLooksUpAgain() async {
+        let reader = SwitchableReader(onWifi)
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero), (.success("203.0.113.7"), .zero)])
+        let monitor = NetworkMonitor(reader: reader, publicIPFetcher: fetcher, debounce: .zero)
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        var fullTunnel = vpnOnly
+        fullTunnel.addresses["en0"] = ["192.168.1.34"]
+        fullTunnel.primaryInterface = "en0"
+        fullTunnel.routeInterface = "utun4"
+        reader.state = fullTunnel
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 2)
+        #expect(monitor.publicIP == .available("203.0.113.7"))
+    }
+
+    @Test func newRouterLooksUpAgain() async {
+        let reader = SwitchableReader(onWifi)
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero), (.success("203.0.113.7"), .zero)])
+        let monitor = NetworkMonitor(reader: reader, publicIPFetcher: fetcher, debounce: .zero)
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        reader.state.router = "192.168.1.254"
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 2)
+    }
+
+    @Test func failedLookupIsRetriedOnTheNextChange() async {
+        let fetcher = FakeFetcher([(.failure(FetchFailed()), .zero), (.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .zero)
+
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+        monitor.scheduleRefresh()
+        await monitor.pendingRefresh?.value
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 2)
+        #expect(monitor.publicIP == .available("85.12.34.201"))
+    }
+
+    @Test func refreshAlwaysLooksUp() async {
+        let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero), (.success("85.12.34.201"), .zero)])
+        let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher)
+
+        monitor.refresh()
+        await monitor.fetchTask?.value
+        monitor.refresh()
+        await monitor.fetchTask?.value
+
+        #expect(await fetcher.calls == 2)
+    }
+
     @Test func startShowsInterfacesImmediatelyWithoutFetching() async {
         let fetcher = FakeFetcher([(.success("85.12.34.201"), .zero)])
         let monitor = NetworkMonitor(reader: FakeReader(state: onWifi), publicIPFetcher: fetcher, debounce: .seconds(60))

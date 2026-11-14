@@ -22,6 +22,9 @@ public final class NetworkMonitor {
     @ObservationIgnored private var storeWatcher: DynamicStoreWatcher?
     @ObservationIgnored private var pathSatisfied = true
     @ObservationIgnored private var session = 0
+    @ObservationIgnored private var router: String?
+    /// What the latest public IP lookup was made for; nil after a failure, so the next change retries.
+    @ObservationIgnored private var lookupKey: LookupKey?
     @ObservationIgnored private var readsStarted = 0
     @ObservationIgnored private var readsApplied = 0
     @ObservationIgnored private(set) var readTask: Task<Void, Never>?
@@ -87,23 +90,50 @@ public final class NetworkMonitor {
     public func refresh() {
         fetchTask?.cancel()
         publicIP = .loading(previous: publicIP.address)
-        fetchTask = Task { [weak self, publicIPFetcher] in
+        fetchTask = Task { [weak self] in
             await self?.updateInterfaces()
-            guard !Task.isCancelled, let connection = self?.connection else { return }
-            guard connection != .offline else {
-                self?.publicIP = .unavailable
-                return
-            }
-
-            let result: PublicIPState
-            do {
-                result = .available(try await publicIPFetcher.fetchPublicIP())
-            } catch {
-                result = .unavailable
-            }
-            guard !Task.isCancelled else { return }
-            self?.publicIP = result
+            await self?.lookUpPublicIP()
         }
+    }
+
+    /// The parts of the state that can change the public IP. A VPN connecting changes several
+    /// store keys a second or more apart; only the ones that change this trigger a new lookup.
+    private struct LookupKey: Equatable {
+        var connection: ConnectionKind
+        var viaInterface: String?
+        var viaAddress: String?
+        var primaryInterface: String?
+        var router: String?
+    }
+
+    private var currentLookupKey: LookupKey {
+        LookupKey(
+            connection: connection,
+            viaInterface: viaInterface?.bsdName,
+            viaAddress: viaInterface?.ipv4,
+            primaryInterface: primaryInterface,
+            router: router
+        )
+    }
+
+    private func lookUpPublicIP() async {
+        guard !Task.isCancelled else { return }
+        let key = currentLookupKey
+        lookupKey = key
+        guard connection != .offline else {
+            publicIP = .unavailable
+            return
+        }
+
+        let result: PublicIPState
+        do {
+            result = .available(try await publicIPFetcher.fetchPublicIP())
+        } catch {
+            result = .unavailable
+        }
+        guard !Task.isCancelled else { return }
+        publicIP = result
+        if case .unavailable = result, lookupKey == key { lookupKey = nil }
     }
 
     /// Reads off the main actor, since the reader makes several synchronous IPC calls.
@@ -117,6 +147,7 @@ public final class NetworkMonitor {
         interfaces = classify(state)
         primaryInterface = state.primaryInterface
         routeInterface = state.routeInterface
+        router = state.router
         connection = pathSatisfied ? connectionKind(interfaces: interfaces, primaryInterface: primaryInterface) : .offline
     }
 
@@ -127,13 +158,18 @@ public final class NetworkMonitor {
         scheduleRefresh()
     }
 
-    /// Coalesces bursts of path updates (e.g. a VPN connecting) into one refresh.
+    /// Coalesces bursts of path updates (e.g. a VPN connecting) into one refresh, which looks up
+    /// the public IP again only when something that can change it has changed.
     func scheduleRefresh() {
         pendingRefresh?.cancel()
         pendingRefresh = Task { [weak self, debounce] in
             try? await Task.sleep(for: debounce)
             guard !Task.isCancelled else { return }
-            self?.refresh()
+            await self?.updateInterfaces()
+            guard !Task.isCancelled, let self, self.currentLookupKey != self.lookupKey else { return }
+            self.fetchTask?.cancel()
+            self.publicIP = .loading(previous: self.publicIP.address)
+            self.fetchTask = Task { [weak self] in await self?.lookUpPublicIP() }
         }
     }
 }
