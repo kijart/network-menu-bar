@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/kijart/network-menu-bar/compare/0.3.0...0.3.1) (2026-11-14)
+
+
+### Performance
+
+* look up the public IP only when the way out to the internet changes ([9574699](https://github.com/kijart/network-menu-bar/commit/95746999af907839f06552de8bc691e59c5f15db))
+
 ## [0.3.0](https://github.com/kijart/network-menu-bar/compare/0.2.0...0.3.0) (2026-11-13)
 
 
