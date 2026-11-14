@@ -15,6 +15,12 @@
 </p>
 
 <p align="center">
+  <a href="https://kijart.github.io/network-menu-bar/"><strong>Website</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/kijart/network-menu-bar/releases/latest"><strong>Download</strong></a>
+</p>
+
+<p align="center">
   <img src="docs/images/menu-detailed-light.png" width="300" alt="Detailed layout, light mode">
   &nbsp;&nbsp;
   <img src="docs/images/menu-compact-dark.png" width="300" alt="Compact layout, dark mode">
@@ -36,6 +42,8 @@
 macOS 14 Sonoma or later.
 
 ## Installation
+
+The [website](https://kijart.github.io/network-menu-bar/) has the Homebrew and disk image options with a copyable command.
 
 ### Download
 
