@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/kijart/network-menu-bar/compare/0.3.1...0.4.0) (2026-11-15)
+
+
+### Features
+
+* add a landing page with SEO metadata and llms.txt ([8ca0d77](https://github.com/kijart/network-menu-bar/commit/8ca0d774704046a7981662c66969abc7f365b2d4))
+* link the website, issues and source code from the About tab ([7c52493](https://github.com/kijart/network-menu-bar/commit/7c5249386d437d022386d3ae481e303d009556ba))
+
 ## [0.3.1](https://github.com/kijart/network-menu-bar/compare/0.3.0...0.3.1) (2026-11-14)
 
 
