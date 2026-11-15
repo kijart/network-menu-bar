@@ -2,6 +2,8 @@ import AppKit
 import SwiftUI
 
 struct AboutView: View {
+    private let website = URL(string: "https://kijart.github.io/network-menu-bar/")!
+    private let issues = URL(string: "https://github.com/kijart/network-menu-bar/issues")!
     private let repository = URL(string: "https://github.com/kijart/network-menu-bar")!
     private let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
 
@@ -16,8 +18,12 @@ struct AboutView: View {
             Text("Version \(version)")
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
-            Link(destination: repository) {
-                Text(verbatim: "github.com/kijart/network-menu-bar")
+            HStack(spacing: 6) {
+                Link("Website", destination: website)
+                Text(verbatim: "·").foregroundStyle(.tertiary)
+                Link("Issues", destination: issues)
+                Text(verbatim: "·").foregroundStyle(.tertiary)
+                Link("Source code", destination: repository)
             }
             Text("MIT License")
                 .font(.caption)

@@ -82,6 +82,16 @@
         }
       }
     },
+    "Issues": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incidencias"
+          }
+        }
+      }
+    },
     "Language": {
       "localizations": {
         "es": {
@@ -242,6 +252,16 @@
         }
       }
     },
+    "Source code": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código fuente"
+          }
+        }
+      }
+    },
     "System": {
       "localizations": {
         "es": {
@@ -298,6 +318,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pendiente de aprobación en Ajustes del Sistema."
+          }
+        }
+      }
+    },
+    "Website": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitio web"
           }
         }
       }

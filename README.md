@@ -96,7 +96,7 @@ Open the menu and choose **Settings…** (⌘,):
 | Launch at login    | On · Off (turned on automatically the first time the app runs from the Applications folder) |
 | Language           | System · English · Español                                                                  |
 
-The **About** tab shows the installed version and a link to this repository.
+The **About** tab shows the installed version and links to the [website](https://kijart.github.io/network-menu-bar/), the issues and the source code.
 
 ## Privacy
 
